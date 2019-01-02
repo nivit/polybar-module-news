@@ -5,7 +5,7 @@ This [polybar](https://github.com/jaagr/polybar) module displays RSS feeds. Then
 
 ## Screenshots
 
-<img alt="Screenshot of polybar module: news" src="screenshots/polybar-module-news.png" width="643">
+<img alt="Screenshot of polybar module: news" src="screenshots/polybar-module-news.gif" width="643">
 
 ## Installation
 Clone or download this repository, then run the following commands:
