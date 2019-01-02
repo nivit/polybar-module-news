@@ -65,9 +65,9 @@ download_rss() {
         exit 0
     fi
 
-    warning_msg "-- Downloading RSS feeds --";
+    warning_msg "-- Downloading RSS feeds --"
 
-    (touch ${rss_lock};
+    (touch ${rss_lock}
 
     if [ "${use_feedparser}" = "0" ]; then
         rsstool --wget -o ${feed_file} \
@@ -76,10 +76,10 @@ download_rss() {
     else
         ${python_cmd} ${rss_py} ${feeds} ${feed_file}
     fi
-    rm ${rss_lock};
+    rm ${rss_lock}
     )
 
-    exit 0;
+    exit 0
 }
 
 
@@ -112,6 +112,12 @@ setup() {
         error_msg "-- please install wget! --"
         exit 0
     fi
+
+    if ! xdg_cmd_loc="$(type -p xdg-open)" \
+            || [[ -z ${xdg_cmd_loc} ]]; then
+        error_msg "-- please install xdg-open program!"
+        exit 0
+    fi
 }
 
 
@@ -137,7 +143,7 @@ main() {
             xdg-open $(cat ${rss_url})&
             exit 0
         else
-            warning_msg "-- Downloading RSS feeds --";
+            warning_msg "-- Downloading RSS feeds --"
             exit 0
         fi
     else
@@ -147,5 +153,5 @@ main() {
 
 
 setup
-main
+main ${1}
 
