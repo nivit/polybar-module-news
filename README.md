@@ -1,7 +1,7 @@
 # Polybar Module - News
 
 ## Description
-This [polybar](https://github.com/jaagr/polybar) module displays RSS feeds. Then You can read news in your browser by a simple click on the bar.
+This [polybar](https://github.com/jaagr/polybar) module displays RSS feeds. Then you can read news in your browser by a simple click on the bar.
 
 ## Screenshots
 
@@ -24,7 +24,7 @@ Enable this module in your bar, e.g:
 modules-left = news ...
 ```
 
-Finally, restart polybar.
+Configure the module (see below) and then restart polybar.
 
 ## Dependencies
 This script requires [bash](https://www.gnu.org/software/bash/), [rsstool](https://sourceforge.net/projects/rsstool/files/rsstool-1.0.0-linux.tar.gz/download) and [wget](https://www.gnu.org/s/wget/) for downloading data. You can alternately use Python feedparser instead of rsstool+wget (install it with `pip install --user feedparser`).
@@ -36,6 +36,9 @@ You can change the interval between two headlines by editing the following file:
 ```
 ~/config/polybar/scripts/news/module.conf
 ```
+
+## Running
+Click on the news headline on the bar to open the relative web page in your browser.
 
 ## License
 This software is licensed under the MIT license. See [LICENSE](LICENSE.md).
