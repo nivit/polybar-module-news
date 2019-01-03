@@ -27,10 +27,10 @@ modules-left = news ...
 Configure the module (see below) and then restart polybar.
 
 ## Dependencies
-This script requires [bash](https://www.gnu.org/software/bash/), [rsstool](https://sourceforge.net/projects/rsstool/files/rsstool-1.0.0-linux.tar.gz/download) and [wget](https://www.gnu.org/s/wget/) for downloading data. You can alternately use Python feedparser instead of rsstool+wget (install it with `pip3 install --user feedparser` or with your packages manager).
+This script requires [bash](https://www.gnu.org/software/bash/), [rsstool](https://sourceforge.net/projects/rsstool/files/rsstool-1.0.0-linux.tar.gz/download) and [wget](https://www.gnu.org/s/wget/) for downloading data. You can alternately use Python 3 feedparser instead of rsstool+wget (install it with `pip3 install --user feedparser` or with your packages manager).
 
 ## Configuration
-Edit the file `~/config/polybar/scripts/news/news.conf` and set up the right Python interpreter if you do not use rsstool.
+Edit the file `~/config/polybar/scripts/news/news.conf` and set up the right Python 3 interpreter if you do not use rsstool.
 
 You can change the interval between two headlines by editing the following file:
 ```
