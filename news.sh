@@ -60,23 +60,23 @@ warning_msg() {
 
 download_rss() {
 
-    if [ ! -f ${feeds} ]; then
+    if [ ! -f "${feeds}" ]; then
         error_msg "-- no feeds file found! --"
         exit 0
     fi
 
     warning_msg "-- Downloading RSS feeds --"
 
-    (touch ${rss_lock}
+    (touch "${rss_lock}"
 
     if [ "${use_feedparser}" = "0" ]; then
-        rsstool --wget -o ${feed_file} \
-            --txt --input-file=${feeds} --sdesc \
-            --template2=${rss_tpl} > /dev/null 2>&1
+        rsstool --wget -o "${feed_file}" \
+            --txt --input-file="${feeds}" --sdesc \
+            --template2="${rss_tpl}" > /dev/null 2>&1
     else
-        ${python_cmd} ${rss_py} ${feeds} ${feed_file}
+        ${python_cmd} "${rss_py} ${feeds} ${feed_file}"
     fi
-    rm ${rss_lock}
+    rm "${rss_lock}"
     )
 
     exit 0
@@ -86,12 +86,13 @@ download_rss() {
 setup() {
 
     # override default values
-    if [ -f ${news_conf} ]; then
-        . ${news_conf}
+    if [ -f "${news_conf}" ]; then
+        # shellcheck source=news.conf
+        . "${news_conf}"
     fi
 
-    if [ ! -d ${module_obj_dir} ]; then
-        mkdir -p ${module_obj_dir}
+    if [ ! -d "${module_obj_dir}" ]; then
+        mkdir -p "${module_obj_dir}"
     fi
 
     if ! rsstool_loc="$(type -p rsstool)" || [[ -z $rsstool_loc ]]; then
@@ -101,6 +102,7 @@ setup() {
         else
             ${python_cmd} -c 'import feedparser' > /dev/null 2>&1
 
+            # shellcheck disable=2181
             if [ $? = 0 ]; then
                 use_feedparser=1
             else
@@ -123,24 +125,25 @@ setup() {
 
 main() {
 
-    if [ -s ${feed_file} ]; then
-        if [ -z "$1" -a ! -f ${rss_lock} ]; then
+    if [ -s "${feed_file}" ]; then
+        if [ -z "$1" ] && [ ! -f "${rss_lock}" ]; then
             if [ "X${show_site}X" = "XyesX" ]; then
-                site=$(sed -n -e '1p' ${feed_file})": "
+                site=$(sed -n -e '1p' "${feed_file}")": "
             else
                 site=""
             fi
 
-            title=$(sed -n -e '2p' ${feed_file})
-            url=$(sed -n -e '3p' ${feed_file})
+            title=$(sed -n -e '2p' "${feed_file}")
+            url=$(sed -n -e '3p' "${feed_file}")
 
             echo "${site}${title}"
-            echo -n ${url} > ${rss_url}
-            sed -i.bak -e '1,3d' ${feed_file}
+            echo -n "${url}" > "${rss_url}"
+            sed -i.bak -e '1,3d' "${feed_file}"
 
             exit 0
         elif [ "$1" = "url" ]; then
-            xdg-open $(cat ${rss_url})&
+            # shellcheck disable=2046
+            xdg-open $(cat "${rss_url}")&
             exit 0
         else
             warning_msg "-- Downloading RSS feeds --"
@@ -153,5 +156,5 @@ main() {
 
 
 setup
-main ${1}
+main "${1}"
 
