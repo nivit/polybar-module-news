@@ -30,10 +30,7 @@ feeds=${module_dir}/rss.feeds
 news_conf=${module_dir}/news.conf
 rss_lock=${module_obj_dir}/news.lock
 rss_py=${module_dir}/download_rss_feeds.py
-rss_tpl=${module_dir}/rsstool.tpl
 rss_url=${module_obj_dir}/news.url
-
-use_feedparser=0
 
 
 error_msg() {
@@ -67,16 +64,10 @@ download_rss() {
 
     warning_msg "-- Downloading RSS feeds --"
 
-    (touch "${rss_lock}"
-
-    if [ "${use_feedparser}" = "0" ]; then
-        rsstool --wget -o "${feed_file}" \
-            --txt --input-file="${feeds}" --sdesc \
-            --template2="${rss_tpl}" > /dev/null 2>&1
-    else
+    (
+        touch "${rss_lock}"
         ${python_cmd} "${rss_py}" "${feeds}" "${feed_file}"
-    fi
-    rm "${rss_lock}"
+        rm "${rss_lock}"
     )
 
     exit 0
@@ -95,24 +86,16 @@ setup() {
         mkdir -p "${module_obj_dir}"
     fi
 
-    if ! rsstool_loc="$(type -p rsstool)" || [[ -z $rsstool_loc ]]; then
-        # rsstool is missing, try with python + feedparser
-        if ! python_loc="$(type -p ${python_cmd})" || [[ -z $python_loc ]]; then
-            error_msg "-- please install rsstool or a python 3 interpreter! --"
-        else
-            ${python_cmd} -c 'import feedparser' > /dev/null 2>&1
+    if ! python_loc="$(type -p ${python_cmd})" || [[ -z $python_loc ]]; then
+        error_msg "-- please install/configure a python 3 interpreter! --"
+    else
+        ${python_cmd} -c 'import feedparser' > /dev/null 2>&1
 
-            # shellcheck disable=2181
-            if [ $? = 0 ]; then
-                use_feedparser=1
-            else
-                error_msg "-- please install python module feedparser! --"
-                exit 0
-            fi
+        # shellcheck disable=2181
+        if [ $? != 0 ]; then
+            error_msg "-- please install python module feedparser! --"
+            exit 0
         fi
-    elif ! wget_loc="$(type -p wget)" || [[ -z $wget_loc ]]; then
-        error_msg "-- please install wget! --"
-        exit 0
     fi
 
     if ! xdg_cmd_loc="$(type -p xdg-open)" \

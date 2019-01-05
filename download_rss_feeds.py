@@ -29,12 +29,12 @@ if __name__ == '__main__':
             else:
                 continue
 
-            site = feed["channel"]["title"]
+            site = feed.feed.title
 
-            for entry in feed["items"]:
+            for entry in feed.entries:
                 F_ITEMS.write("{}\n".format(site))
-                F_ITEMS.write("{}\n".format(entry["title"]))
-                F_ITEMS.write("{}\n".format(entry["link"]))
+                F_ITEMS.write("{}\n".format(entry.title))
+                F_ITEMS.write("{}\n".format(entry.link))
 
     del F_ITEMS
 
