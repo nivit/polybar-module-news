@@ -1,7 +1,7 @@
 # Polybar Module - News
 
 ## Description
-This [polybar](https://github.com/jaagr/polybar) module displays RSS/Atom feeds. So you can read news in your browser by a simple click on the bar.
+This [polybar](https://github.com/jaagr/polybar) module displays RSS/Atom feeds, so you can read news in your browser by a simple click on the bar.
 
 ## Screenshots
 
