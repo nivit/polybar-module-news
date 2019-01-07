@@ -26,6 +26,8 @@ modules-left = news ...
 
 Configure the module (see below) and then restart polybar.
 
+N.B. After installing Python 3 and/or feedparser you need to wait about 10 seconds before the error message of missing requirement disappears.
+
 ## Dependencies
 This script requires
 - [bash](https://www.gnu.org/software/bash/)
