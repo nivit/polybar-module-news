@@ -30,7 +30,7 @@ Configure the module (see below) and then restart polybar.
 This script requires
 - [bash](https://www.gnu.org/software/bash/)
 - [python](https://www.python.org) 3
-- python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your packages manager).
+- python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your package manager).
 
 N.B. After installing Python 3 and/or feedparser you need to wait about 10 seconds before the error message of missing requirement disappears.
 
