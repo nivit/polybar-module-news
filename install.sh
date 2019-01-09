@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# this script installs the polybar module rss
+# this script installs the polybar module news
 
 destdir=${HOME}/.config/polybar/scripts/news
 polybar_conf=${HOME}/.config/polybar/config
