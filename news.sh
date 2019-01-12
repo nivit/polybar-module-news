@@ -129,7 +129,7 @@ main() {
             xdg-open $(cat "${rss_url}")&
             exit 0
         else
-            warning_msg "-- Downloading RSS feeds --"
+            warning_msg "-- Downloading RSS/Atom feeds --"
             exit 0
         fi
     else
