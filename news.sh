@@ -11,6 +11,12 @@
 show_site="yes"  # display the name of the source
 use_colors="yes"  # for error/warning
 
+# number of characters for the output
+# zero means no limit
+length=0  # a value >= 0
+# used only when length > 0
+add_ellipsis="yes"  # yes|no
+
 error_bg_color="#F44336"
 error_fg_color="#FFFFFF"
 warning_bg_color="#FFC107"
@@ -117,11 +123,24 @@ main() {
             fi
 
             title=$(sed -n -e '2p' "${feed_file}")
+            output="${site}${title}"
+
+            if [ "${length}" -gt 0 ] && [ "${length}" -lt "${#output}" ]; then
+                if [ "X${add_ellipsis}X" = "XyesX" ] ; then
+                    ellipsis="..."
+                    length="$((length - 3))"
+                else
+                    ellipsis=""
+                fi
+                output="$(echo -n "${output}" | cut -c -"${length}")"
+                output="${output% *}${ellipsis}"
+            fi
+
             url=$(sed -n -e '3p' "${feed_file}")
 
-            echo "${site}${title}"
             echo -n "${url}" > "${rss_url}"
             sed -i.bak -e '1,3d' "${feed_file}"
+            echo -n "${output}"
 
             exit 0
         elif [ "$1" = "url" ]; then
