@@ -28,7 +28,6 @@ Configure the module (see below) and then restart polybar.
 
 ## Dependencies
 This script requires
-- [bash](https://www.gnu.org/software/bash/);
 - [python](https://www.python.org) 3;
 - python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your package manager);
 - [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news link).

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # title: Polybar Module - News
 # project-home: https://github.com/nivit/polybar-module-news
@@ -42,9 +42,9 @@ rss_url=${module_obj_dir}/news.url
 error_msg() {
 
     if [ "X${use_colors}X" = "XyesX" ]; then
-        echo -n "%{B${error_bg_color} F${error_fg_color}} ${1} %{B- F-}"
+        printf "%s" "%{B${error_bg_color} F${error_fg_color}} ${1} %{B- F-}"
     else
-        echo -n "${1}"
+        printf "%s" "${1}"
     fi
 
     exit 0
@@ -54,9 +54,9 @@ error_msg() {
 warning_msg() {
 
     if [ "X${use_colors}X" = "XyesX" ]; then
-        echo -n "%{B${warning_bg_color} F${warning_fg_color}} ${1} %{B- F-}"
+        printf "%s" "%{B${warning_bg_color} F${warning_fg_color}} ${1} %{B- F-}"
     else
-        echo -n "${1}"
+        printf "%s" "${1}"
     fi
 }
 
@@ -68,7 +68,7 @@ download_rss() {
         exit 0
     fi
 
-    warning_msg "-- Downloading RSS feeds --"
+    warning_msg "-- Downloading RSS/Atom feeds --"
 
     (
         touch "${rss_lock}"
@@ -92,20 +92,16 @@ setup() {
         mkdir -p "${module_obj_dir}"
     fi
 
-    if ! python_loc="$(type -p ${python_cmd})" || [[ -z $python_loc ]]; then
-        error_msg "-- please install/configure a python 3 interpreter! --"
-    else
-        ${python_cmd} -c 'import feedparser' > /dev/null 2>&1
-
-        # shellcheck disable=2181
-        if [ $? != 0 ]; then
+    if command -v "$python_cmd" > /dev/null 2>&1; then
+        if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
             error_msg "-- please install python module feedparser! --"
             exit 0
         fi
+    else
+        error_msg "-- please install/configure a python 3 interpreter! --"
     fi
 
-    if ! xdg_cmd_loc="$(type -p xdg-open)" \
-            || [[ -z ${xdg_cmd_loc} ]]; then
+   if ! command -v xdg-open > /dev/null 2>&1; then
         error_msg "-- please install xdg-open program!"
         exit 0
     fi
@@ -132,20 +128,19 @@ main() {
                 else
                     ellipsis=""
                 fi
-                output="$(echo -n "${output}" | cut -c -"${length}")"
+                output="$(printf "%s" "${output}" | cut -c -"${length}")"
                 output="${output% *}${ellipsis}"
             fi
 
             url=$(sed -n -e '3p' "${feed_file}")
 
-            echo -n "${url}" > "${rss_url}"
+            printf "%s" "${url}" > "${rss_url}"
             sed -i.bak -e '1,3d' "${feed_file}"
-            echo -n "${output}"
+            printf "%s" "${output}"
 
             exit 0
         elif [ "$1" = "url" ]; then
-            # shellcheck disable=2046
-            xdg-open $(cat "${rss_url}")&
+            xdg-open "$(cat "${rss_url}")"&
             exit 0
         else
             warning_msg "-- Downloading RSS/Atom feeds --"
