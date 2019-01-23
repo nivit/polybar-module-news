@@ -68,6 +68,19 @@ download_rss() {
         exit 0
     fi
 
+    if [ ! -d "${module_obj_dir}" ]; then
+        mkdir -p "${module_obj_dir}"
+    fi
+
+    if command -v "$python_cmd" > /dev/null 2>&1; then
+        if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
+            error_msg "-- please install python module feedparser! --"
+            exit 0
+        fi
+    else
+        error_msg "-- please install/configure a python 3 interpreter! --"
+    fi
+
     warning_msg "-- Downloading RSS/Atom feeds --"
 
     (
@@ -86,19 +99,6 @@ setup() {
     if [ -f "${news_conf}" ]; then
         # shellcheck source=news.conf disable=SC1091
         . "${news_conf}"
-    fi
-
-    if [ ! -d "${module_obj_dir}" ]; then
-        mkdir -p "${module_obj_dir}"
-    fi
-
-    if command -v "$python_cmd" > /dev/null 2>&1; then
-        if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
-            error_msg "-- please install python module feedparser! --"
-            exit 0
-        fi
-    else
-        error_msg "-- please install/configure a python 3 interpreter! --"
     fi
 
    if ! command -v xdg-open > /dev/null 2>&1; then
