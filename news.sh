@@ -8,6 +8,8 @@
 # default values #
 ##################
 
+show_menu="yes"  # show a menu of all news (via rofi)
+rofi_prompt="find news"
 show_site="yes"  # display the name of the source
 use_colors="yes"  # for error/warning
 
@@ -22,7 +24,7 @@ error_fg_color="#FFFFFF"
 warning_bg_color="#FFC107"
 warning_fg_color="#212121"
 
-python_cmd=python3.6
+python_cmd=python3
 
 ################
 # start script #
@@ -32,6 +34,7 @@ module_dir=${HOME}/.config/polybar/scripts/news
 module_obj_dir=${module_dir}/obj
 
 feed_file=${module_obj_dir}/news.items
+menu_file=${feed_file}.menu
 feeds=${module_dir}/rss.feeds
 news_conf=${module_dir}/news.conf
 rss_lock=${module_obj_dir}/news.lock
@@ -74,11 +77,11 @@ download_rss() {
 
     if command -v "$python_cmd" > /dev/null 2>&1; then
         if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
-            error_msg "-- please install python module feedparser! --"
+            error_msg "-- install python module feedparser, please! --"
             exit 0
         fi
     else
-        error_msg "-- please install/configure a python 3 interpreter! --"
+        error_msg "-- install/configure a python 3 interpreter, please! --"
     fi
 
     warning_msg "-- Downloading RSS/Atom feeds --"
@@ -86,8 +89,29 @@ download_rss() {
     (
         touch "${rss_lock}"
         ${python_cmd} "${rss_py}" "${feeds}" "${feed_file}"
+        cp -f "${feed_file}" "${menu_file}"
         rm "${rss_lock}"
     )
+
+    exit 0
+}
+
+
+show_menu() {
+    if [ ! -f "${menu_file}" ]; then
+        error_msg "-- no news file found! --"
+        exit 0
+    fi
+
+    choice="$(awk '{if (((NR-2) % 3) == 0) print $0}' "${menu_file}"| \
+        rofi -p "${menu_prompt}" "${rofi_options}" -lines ${menu_lines} \
+            -format d -dmenu)"
+
+    if [ -n "${choice}" ]; then
+        url="$(sed -n -e $((choice*3))p "${menu_file}")"
+        xdg-open "${url}";
+        exit 0
+    fi
 
     exit 0
 }
@@ -101,8 +125,15 @@ setup() {
         . "${news_conf}"
     fi
 
+    if [ "X${show_menu}X" = "XyesX" ]; then
+        if ! command -v rofi > /dev/null 2>&1; then
+            error_msg "-- install rofi program, please! --"
+            exit 0
+        fi
+    fi
+
     if ! command -v xdg-open > /dev/null 2>&1; then
-        error_msg "-- please install xdg-open program!"
+        error_msg "-- install xdg-open program, please! --"
         exit 0
     fi
 }
@@ -139,11 +170,14 @@ main() {
             printf "%s" "${output}"
 
             exit 0
+        elif [ "$1" = "url" ]; then
+            xdg-open "$(cat "${rss_url}")"&
+            exit 0
         elif [ "$1" = "download" ] && [ ! -f "${rss_lock}" ]; then
             download_rss
             exit 0
-        elif [ "$1" = "url" ]; then
-            xdg-open "$(cat "${rss_url}")"&
+        elif [ "$1" = "show_menu" ] && [ ! -f "${rss_lock}" ]; then
+            show_menu
             exit 0
         else
             warning_msg "-- Downloading RSS/Atom feeds --"

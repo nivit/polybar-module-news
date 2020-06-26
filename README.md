@@ -24,6 +24,8 @@ Enable this module in your bar, e.g:
 modules-left = news ...
 ```
 
+(It is advisable to use a whole bar for this module only).
+
 Configure the module (see below) and then restart polybar.
 
 ## Dependencies
@@ -31,19 +33,27 @@ This script requires
 - [python](https://www.python.org) 3;
 - python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your package manager);
 - [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news link).
+- [rofi](https://github.com/davatorium/rofi) (optional: to show a menu with all news).
 
-N.B. After installing Python 3 and/or feedparser you need to wait about 10 seconds before the error message of missing requirement disappears.
+N.B. After installing Python 3 and/or feedparser/rofi you need to wait about 10 seconds before the error message of missing requirement disappears.
 
 ## Configuration
-Edit the file `~/config/polybar/scripts/news/news.conf` and set up the right Python 3 interpreter.
+Edit the file `~/.config/polybar/scripts/news/news.conf` and set up the right Python 3 interpreter.
 
-Available options:
+All available options:
 
 ```
 python_cmd=python3  # or python3.6, etc.
 
 show_site="yes"  # display the name of the RSS/Atom source
 use_colors="yes"  # for error/warning
+
+# show a menu of all news (via rofi)
+# the menu is activated by a right-click on the bar
+show_menu="yes"
+menu_lines="20"  # number of news to show in the menu
+menu_prompt="find news"
+rofi_options="-i"  # -i makes dmenu saerches case-insensitive
 
 # number of characters for the output
 # zero means no limit
@@ -58,13 +68,32 @@ warning_bg_color="#FFC107"
 warning_fg_color="#212121"
 ```
 
-You can change the interval between two headlines by editing the following file:
+You can change the interval between two headlines by editing the relative option
+in the following file:
 ```
-~/config/polybar/scripts/news/module.conf
+~/.config/polybar/scripts/news/module.conf
 ```
 
 ## Running
-Click on the news headline on the bar to open the relative web page in your browser.
+Click on the news headline on the bar to open the relative web page in your
+browser.
+With a right click on the bar you can open a menu with all news. You may also
+show that menu by defining a key shortcut. The command to bind is:
+```
+~/.config/polybar/scripts/news/news.sh show_menu
+```
+
+For example, in [bspwm](https://github.com/baskerville/bspwm)/[sxhkd](https://github.com/baskerville/sxhkd), you can add these lines to `~/.config/sxhkd/sxhkdrc`:
+
+```
+super + ctrl + shift + r
+    $HOME/.config/polybar/scripts/news/news.sh show_menu
+```
+
+or in [i3](https://i3wm.org/) you can add this line to `~/.config/i3/config`:
+```
+bindsym Mod4 + Control + Shift + r exec --no-startup-id bash -c $HOME/.config/polybar/scripts/news/news.sh show_menu
+```
 
 ## License
 This software is licensed under the MIT license. See [LICENSE](LICENSE.md).
