@@ -101,7 +101,7 @@ setup() {
         . "${news_conf}"
     fi
 
-   if ! command -v xdg-open > /dev/null 2>&1; then
+    if ! command -v xdg-open > /dev/null 2>&1; then
         error_msg "-- please install xdg-open program!"
         exit 0
     fi
@@ -155,3 +155,4 @@ main() {
 setup
 main "${1}"
 
+# vim: expandtab shiftwidth=4 smartindent softtabstop=4 tabstop=4
