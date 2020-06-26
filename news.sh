@@ -139,6 +139,9 @@ main() {
             printf "%s" "${output}"
 
             exit 0
+        elif [ "$1" = "download" ] && [ ! -f "${rss_lock}" ]; then
+            download_rss
+            exit 0
         elif [ "$1" = "url" ]; then
             xdg-open "$(cat "${rss_url}")"&
             exit 0
