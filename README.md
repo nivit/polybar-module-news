@@ -1,7 +1,10 @@
 # Polybar Module - News
 
 ## Description
-This [polybar](https://github.com/jaagr/polybar) module displays RSS/Atom feeds, so you can read news in your browser by a simple click on the bar.
+This [polybar](https://github.com/jaagr/polybar) module displays RSS/Atom feeds,
+so you can read news in your browser by a simple click on the bar.
+You can also find/choose a specific news by a menu (via rofi) opened by
+a keyboard shortcut.
 
 ## Screenshot
 
@@ -32,8 +35,8 @@ Configure the module (see below) and then restart polybar.
 This script requires
 - [python](https://www.python.org) 3;
 - python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your package manager);
-- [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news link).
-- [rofi](https://github.com/davatorium/rofi) (optional: to show a menu with all news).
+- [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news link);
+- [rofi](https://github.com/davatorium/rofi) (optional dependency to show a menu with all news).
 
 N.B. After installing Python 3 and/or feedparser/rofi you need to wait about 10 seconds before the error message of missing requirement disappears.
 
@@ -53,7 +56,7 @@ use_colors="yes"  # for error/warning
 show_menu="yes"
 menu_lines="20"  # number of news to show in the menu
 menu_prompt="find news"
-rofi_options="-i"  # -i makes dmenu saerches case-insensitive
+rofi_options="-i"  # -i makes dmenu searches case-insensitive
 
 # number of characters for the output
 # zero means no limit
@@ -83,16 +86,17 @@ show that menu by defining a key shortcut. The command to bind is:
 ~/.config/polybar/scripts/news/news.sh show_menu
 ```
 
-For example, in [bspwm](https://github.com/baskerville/bspwm)/[sxhkd](https://github.com/baskerville/sxhkd), you can add these lines to `~/.config/sxhkd/sxhkdrc`:
+For example, for [bspwm](https://github.com/baskerville/bspwm)/[sxhkd](https://github.com/baskerville/sxhkd),
+you can add these lines to `~/.config/sxhkd/sxhkdrc`:
 
 ```
 super + ctrl + shift + r
     $HOME/.config/polybar/scripts/news/news.sh show_menu
 ```
 
-or in [i3](https://i3wm.org/) you can add this line to `~/.config/i3/config`:
+or for [i3wm](https://i3wm.org/) this line to `~/.config/i3/config`:
 ```
-bindsym Mod4 + Control + Shift + r exec --no-startup-id bash -c $HOME/.config/polybar/scripts/news/news.sh show_menu
+bindsym Mod4 + Control + Shift + r exec --no-startup-id ~/.config/polybar/scripts/news/news.sh show_menu
 ```
 
 ## License
