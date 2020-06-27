@@ -10,6 +10,7 @@
 
 show_menu="yes"  # show a menu of all news (via rofi)
 rofi_prompt="find news"
+rofi_options="-i"  # -i makes dmenu searches case-insensitive
 show_site="yes"  # display the name of the source
 use_colors="yes"  # for error/warning
 
