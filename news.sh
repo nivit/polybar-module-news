@@ -42,33 +42,29 @@ rss_lock=${module_obj_dir}/news.lock
 rss_py=${module_dir}/download_rss_feeds.py
 rss_url=${module_obj_dir}/news.url
 
-
-error_msg() {
+print_msg() {
 
     if [ "X${use_colors}X" = "XyesX" ]; then
-        printf "%s" "%{B${error_bg_color} F${error_fg_color}} ${1} %{B- F-}"
+        if [ "${1}" == "warning" ]; then
+            bg_color="${warning_bg_color}"
+            fg_color="${warning_fg_color}"
+        else
+            bg_color="${error_bg_color}"
+            fg_color="${error_fg_color}"
+        fi
+        printf "%s" "%{B${bg_color} F${fg_color}} -- ${2} -- %{B- F-}"
     else
-        printf "%s" "${1}"
+        printf "%s" "${2}"
     fi
 
     exit 0
 }
 
 
-warning_msg() {
-
-    if [ "X${use_colors}X" = "XyesX" ]; then
-        printf "%s" "%{B${warning_bg_color} F${warning_fg_color}} ${1} %{B- F-}"
-    else
-        printf "%s" "${1}"
-    fi
-}
-
-
 download_rss() {
 
     if [ ! -f "${feeds}" ]; then
-        error_msg "-- no feeds file found! --"
+        print_msg error "no feeds file found!"
         exit 0
     fi
 
@@ -78,14 +74,14 @@ download_rss() {
 
     if command -v "$python_cmd" > /dev/null 2>&1; then
         if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
-            error_msg "-- install python module feedparser, please! --"
+            print_msg error "install python module feedparser, please!"
             exit 0
         fi
     else
-        error_msg "-- install/configure a python 3 interpreter, please! --"
+        print_msg error "install/configure a python 3 interpreter, please!"
     fi
 
-    warning_msg "-- Downloading RSS/Atom feeds --"
+    print_msg warning "Downloading RSS/Atom feeds"
 
     (
         touch "${rss_lock}"
@@ -100,7 +96,7 @@ download_rss() {
 
 show_menu() {
     if [ ! -f "${menu_file}" ]; then
-        error_msg "-- no news file found! --"
+        print_msg error "no news file found!"
         exit 0
     fi
 
@@ -128,13 +124,13 @@ setup() {
 
     if [ "X${show_menu}X" = "XyesX" ]; then
         if ! command -v rofi > /dev/null 2>&1; then
-            error_msg "-- install rofi program, please! --"
+            print_msg error "install rofi program, please!"
             exit 0
         fi
     fi
 
     if ! command -v xdg-open > /dev/null 2>&1; then
-        error_msg "-- install xdg-open program, please! --"
+        print_msg error "install xdg-open program, please!"
         exit 0
     fi
 }
@@ -181,7 +177,7 @@ main() {
             show_menu
             exit 0
         else
-            warning_msg "-- Downloading RSS/Atom feeds --"
+            print_msg warning "Downloading RSS/Atom feeds"
             exit 0
         fi
     else
