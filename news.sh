@@ -45,7 +45,7 @@ rss_url=${module_obj_dir}/news.url
 print_msg() {
 
     if [ "X${use_colors}X" = "XyesX" ]; then
-        if [ "${1}" == "warning" ]; then
+        if [ "${1}" = "warning" ]; then
             bg_color="${warning_bg_color}"
             fg_color="${warning_fg_color}"
         else
@@ -57,6 +57,9 @@ print_msg() {
         printf "%s" "${2}"
     fi
 
+    if [ "${1}" = "error" ]; then
+        exit 0  # ignore error...
+    fi
 }
 
 
@@ -64,7 +67,6 @@ download_rss() {
 
     if [ ! -f "${feeds}" ]; then
         print_msg error "no feeds file found!"
-        exit 0
     fi
 
     if [ ! -d "${module_obj_dir}" ]; then
@@ -74,11 +76,9 @@ download_rss() {
     if command -v "$python_cmd" > /dev/null 2>&1; then
         if ! ${python_cmd} -c 'import feedparser' > /dev/null 2>&1; then
             print_msg error "install python module feedparser, please!"
-            exit 0
         fi
     else
         print_msg error "install/configure a python 3 interpreter, please!"
-        exit 0
     fi
 
     print_msg warning "Downloading RSS/Atom feeds"
@@ -97,7 +97,6 @@ download_rss() {
 show_menu() {
     if [ ! -f "${menu_file}" ]; then
         print_msg error "no news file found!"
-        exit 0
     fi
 
     choice="$(awk '{if (((NR-2) % 3) == 0) print $0}' "${menu_file}"| \
@@ -125,13 +124,11 @@ setup() {
     if [ "X${show_menu}X" = "XyesX" ]; then
         if ! command -v rofi > /dev/null 2>&1; then
             print_msg error "install rofi program, please!"
-            exit 0
         fi
     fi
 
     if ! command -v xdg-open > /dev/null 2>&1; then
         print_msg error "install xdg-open program, please!"
-        exit 0
     fi
 }
 
@@ -178,7 +175,6 @@ main() {
             exit 0
         else
             print_msg warning "Downloading RSS/Atom feeds"
-            exit 0
         fi
     else
         download_rss
