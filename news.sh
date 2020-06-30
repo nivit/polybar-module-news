@@ -57,7 +57,6 @@ print_msg() {
         printf "%s" "${2}"
     fi
 
-    exit 0
 }
 
 
@@ -79,6 +78,7 @@ download_rss() {
         fi
     else
         print_msg error "install/configure a python 3 interpreter, please!"
+        exit 0
     fi
 
     print_msg warning "Downloading RSS/Atom feeds"
