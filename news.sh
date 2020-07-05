@@ -165,7 +165,7 @@ show_menu() {
         fi
     fi
 
-    menu_lines="$(get_rofi_value lines)"
+    menu_lines?="$(get_rofi_value lines)"
     news_number="$(awk 'END {print NR/2}' "${rofi_list}")"
 
     if [ "${news_number}" -lt "${menu_lines}" ]; then
