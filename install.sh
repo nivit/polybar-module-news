@@ -6,7 +6,7 @@ destdir=${HOME}/.config/polybar/scripts/news
 polybar_conf=${HOME}/.config/polybar/config
 
 install -d "${destdir}"
-install -b -m 644 ./*.conf ./*.py rss.feeds "${destdir}"
+install -b -m 644 ./*.conf ./*.rasi ./*.py rss.feeds "${destdir}"
 install -m 554 news.sh "${destdir}"
 
 if [ -f "${polybar_conf}" ]; then
