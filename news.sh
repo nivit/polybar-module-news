@@ -4,15 +4,17 @@
 # project-home: https://github.com/nivit/polybar-module-news
 # license: MIT
 
+
 ##################
 # default values #
 ##################
 
-show_menu="yes"  # show a menu of all news (via rofi)
-rofi_prompt="find news"
-rofi_options="-i"  # -i makes dmenu searches case-insensitive
-show_site="yes"  # display the name of the source
+show_site="yes"  # display the name of the news source
 use_colors="yes"  # for error/warning
+
+show_menu="yes"  # show a menu with all news (via rofi, right click)
+menu_prompt="Find news"
+menu_lines=15
 
 # number of characters for the output
 # zero means no limit
@@ -27,6 +29,7 @@ warning_fg_color="#212121"
 
 python_cmd=python3
 
+
 ################
 # start script #
 ################
@@ -35,12 +38,19 @@ module_dir=${HOME}/.config/polybar/scripts/news
 module_obj_dir=${module_dir}/obj
 
 feed_file=${module_obj_dir}/news.items
-menu_file=${feed_file}.menu
 feeds=${module_dir}/rss.feeds
+menu_file=${feed_file}.menu
+menu_scrollbar=true
 news_conf=${module_dir}/news.conf
+rofi_case=""  # case is sensitive
+rofi_config=${module_dir}/config.rasi
+rofi_list=${menu_file}.${show_site}
+rofi_options=""
+rofi_width=""  # "auto" or "" (menu width)
 rss_lock=${module_obj_dir}/news.lock
 rss_py=${module_dir}/download_rss_feeds.py
 rss_url=${module_obj_dir}/news.url
+
 
 print_msg() {
 
@@ -58,7 +68,19 @@ print_msg() {
     fi
 
     if [ "${1}" = "error" ]; then
-        exit 0  # ignore error...
+        exit 0  # actually ignore the error...
+    fi
+}
+
+write_rofi_list() {
+    # generate the list of news to show in rofi
+    if [ -f "${feed_file}" ]; then
+        awk -v show_site="${show_site}" '
+            # ignore links to news
+            NR % 3 == 0 {print $0; next}
+            (NR-1) % 3 == 0 && (show_site == "yes") {printf "%s: ", $0}
+            (NR-2) % 3 == 0
+        ' "${menu_file}" > "${rofi_list}"
     fi
 }
 
@@ -87,24 +109,82 @@ download_rss() {
         touch "${rss_lock}"
         ${python_cmd} "${rss_py}" "${feeds}" "${feed_file}"
         cp -f "${feed_file}" "${menu_file}"
-        rm "${rss_lock}"
+        if [ "X${show_menu}X" = "XyesX" ]; then
+            write_rofi_list
+        fi
+        rm -f "${rss_lock}"
     )
 
     exit 0
 }
 
+get_rofi_value() {
+    # get a value from the rofi configuration.
+    value="$(awk -v search="$1" '
+    BEGIN {FS=":"; regex=sprintf("^[[:space:]]*%s:", search);}
+        $0 ~ regex {gsub(/;|[ \t]+/, "", $2); printf "%s", $2; exit 0}
+    ' "${rofi_config}")"
+
+    echo "${value}"
+}
 
 show_menu() {
-    if [ ! -f "${menu_file}" ]; then
-        print_msg error "no news file found!"
+    # show a menu with all news (via rofi)
+    if [ -f "${rss_lock}" ]; then
+        rofi ${rofi_options} -e "Downloading RSS/Atom feeds"
+        exit 0
     fi
 
-    choice="$(awk '{if (((NR-2) % 3) == 0) print $0}' "${menu_file}"| \
-        rofi -p "${menu_prompt}" "${rofi_options}" -lines ${menu_lines} \
-            -format d -dmenu)"
+    if [ ! -f "${menu_file}" ]; then
+        rofi ${rofi_options} -e "no news file found!"
+        exit 0
+    fi
+
+    if [ ! -f "${rofi_list}" ]; then
+        write_rofi_list
+    fi
+
+    if [ -f "${rofi_config}" ]; then
+        menu_width="$(get_rofi_value width)"
+
+        if [ -z "${menu_width}" ] || [ "${menu_width#-}" != "${menu_width}" ] && \
+            [ "${rofi_width}" = "auto" ]; then
+            news_len="$(awk '
+            NR % 2 == 1 {if (max < length()) { max = length()}}
+            # return a negative value to indicate a character width
+            # see rofi(1)
+            END {print -max - 2}
+            ' "${rofi_list}")"
+            menu_width="${news_len}"
+        fi
+
+        menu_case="$(get_rofi_value case-sensitive)"
+
+        if [ "${menu_case}" = "false" ]; then
+            rofi_case="-i"
+        fi
+    fi
+
+    menu_lines="$(get_rofi_value lines)"
+    news_number="$(awk 'END {print NR/2}' "${rofi_list}")"
+
+    if [ "${news_number}" -lt "${menu_lines}" ]; then
+        menu_lines=${news_number}
+        menu_scrollbar="false"
+    fi
+
+    choice="$(awk 'NR % 2 == 1' "${rofi_list}" | \
+        rofi ${rofi_options} \
+            -p "${menu_prompt}" \
+            -dmenu \
+            -format d \
+            -lines "${menu_lines}" \
+            "${rofi_case}" \
+            -theme-str "*{scrollbar:${menu_scrollbar};}" \
+            -width "${menu_width}")"
 
     if [ -n "${choice}" ]; then
-        url="$(sed -n -e $((choice*3))p "${menu_file}")"
+        url="$(sed -n -e $((choice*2))p "${rofi_list}")"
         xdg-open "${url}";
         exit 0
     fi
@@ -119,6 +199,7 @@ setup() {
     if [ -f "${news_conf}" ]; then
         # shellcheck source=news.conf disable=SC1091
         . "${news_conf}"
+        rofi_list=${menu_file}.${show_site}
     fi
 
     if [ "X${show_menu}X" = "XyesX" ]; then
@@ -130,6 +211,11 @@ setup() {
     if ! command -v xdg-open > /dev/null 2>&1; then
         print_msg error "install xdg-open program, please!"
     fi
+
+    if [ -f "${rofi_config}" ]; then
+        rofi_options="-config ${rofi_config}"
+    fi
+
 }
 
 
