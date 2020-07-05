@@ -54,9 +54,12 @@ use_colors="yes"  # for error/warning
 # show a menu of all news (via rofi)
 # the menu is activated by a right-click on the bar
 show_menu="yes"
-menu_lines="20"  # number of news to show in the menu
-menu_prompt="find news"
-rofi_options="-i"  # -i makes dmenu searches case-insensitive
+# number of news to show in the menu
+# you can also define it in config.rasi
+menu_lines="20"
+menu_prompt="Find news"
+rofi_config="${HOME}/.config/polybar/scripts/news/config.rasi"
+rofi_width="auto"  # (auto or empty)  # see rofi(1)
 
 # number of characters for the output
 # zero means no limit
@@ -95,6 +98,7 @@ super + ctrl + shift + r
 ```
 
 or for [i3wm](https://i3wm.org/) this line to `~/.config/i3/config`:
+
 ```
 bindsym Mod4 + Control + Shift + r exec --no-startup-id ~/.config/polybar/scripts/news/news.sh show_menu
 ```
