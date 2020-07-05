@@ -88,6 +88,8 @@ in the following file:
 ~/.config/polybar/scripts/news/module.conf
 ```
 
+To configure the menu you can edit the file ``` ~/.config/polybar/scripts/news/config.rasi```.
+
 ## Running
 Click on the news headline on the bar to open the relative web page in your
 browser.
