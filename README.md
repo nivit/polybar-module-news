@@ -10,6 +10,8 @@ a keyboard shortcut.
 
 <img alt="Screenshot of polybar module: news" src="screenshots/polybar-module-news.gif" width="860">
 
+<img alt="Animated gif of the menu with all news" src="screenshots/polybar-module-news-menu.gif" width="860">
+
 ## Installation
 Clone or download this repository, then run the following commands:
 ```
