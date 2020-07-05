@@ -8,9 +8,15 @@ a keyboard shortcut.
 
 ## Screenshot
 
+<figure>
 <img alt="Screenshot of polybar module: news" src="screenshots/polybar-module-news.gif" width="860">
+<figcaption>The module news on polybar</figcaption>
+</figure>
 
+<figure>
 <img alt="Animated gif of the menu with all news" src="screenshots/polybar-module-news-menu.gif" width="860">
+<figcaption>The menu with all news opened above the bar</figcaption>
+</figure>
 
 ## Installation
 Clone or download this repository, then run the following commands:
