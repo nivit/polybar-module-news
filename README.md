@@ -18,11 +18,16 @@ a keyboard shortcut.
 <figcaption>The menu with all news opened above the bar</figcaption>
 </figure>
 
-## Installation
+## Installation/Updating
 Clone or download this repository, then run the following commands:
 ```
 $ cd polybar-module-news  # directory where you cloned the repository or unzipped the release file
 $ sh install.sh
+```
+
+To update the module run the following command:
+```
+$ sh install.sh update
 ```
 
 Add your favorite RSS/Atom feeds to `~/.config/.polybar/scripts/news/rss.feeds`
