@@ -15,5 +15,5 @@ configuration {
 	separator-style: "solid";
 	hide-scrollbar: true;
 	scrollbar-width: 0;
-	/* theme: "~/.config/polybar/scripts/news/news-theme.rasi"; */
+	theme: "~/.config/polybar/scripts/news/news-theme.rasi";
 }
