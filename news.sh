@@ -14,7 +14,7 @@ use_colors="yes"  # for error/warning
 
 show_menu="yes"  # show a menu with all news (via rofi, right click)
 menu_prompt="Find news"
-menu_lines=15
+_menu_lines=15
 
 # number of characters for the output
 # zero means no limit
@@ -74,6 +74,8 @@ print_msg() {
 
 write_rofi_list() {
     # generate the list of news to show in rofi
+    cp -f "${feed_file}" "${menu_file}"
+
     if [ -f "${feed_file}" ]; then
         awk -v show_site="${show_site}" '
             # ignore links to news
@@ -108,7 +110,6 @@ download_rss() {
     (
         touch "${rss_lock}"
         ${python_cmd} "${rss_py}" "${feeds}" "${feed_file}"
-        cp -f "${feed_file}" "${menu_file}"
         if [ "X${show_menu}X" = "XyesX" ]; then
             write_rofi_list
         fi
@@ -135,12 +136,7 @@ show_menu() {
         exit 0
     fi
 
-    if [ ! -f "${menu_file}" ]; then
-        rofi ${rofi_options} -e "no news file found!"
-        exit 0
-    fi
-
-    if [ ! -f "${rofi_list}" ]; then
+    if [ ! -f "${menu_file}" ] || [ ! -f "${rofi_list}" ]; then
         write_rofi_list
     fi
 
@@ -165,7 +161,15 @@ show_menu() {
         fi
     fi
 
-    menu_lines?="$(get_rofi_value lines)"
+    if [ -n "$(echo "${menu_lines}" | tr -d "0-9")" ]; then
+        # menu_lines is not a number
+        menu_lines="$(get_rofi_value lines)"
+    fi
+
+    if [ -z "${menu_lines}" ]; then
+        menu_lines=${_menu_lines}
+    fi
+
     news_number="$(awk 'END {print NR/2}' "${rofi_list}")"
 
     if [ "${news_number}" -lt "${menu_lines}" ]; then
