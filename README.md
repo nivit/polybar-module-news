@@ -9,11 +9,6 @@ a keyboard shortcut.
 ## Screenshots
 
 <figure>
-<img alt="Screenshot of polybar module: news" src="screenshots/polybar-module-news.gif" width="860">
-<figcaption>The module news on polybar</figcaption>
-</figure>
-
-<figure>
 <img alt="Animated gif of the menu with all news" src="screenshots/polybar-module-news-menu.gif" width="860">
 <figcaption>The menu with all news opened above the bar</figcaption>
 </figure>
@@ -119,7 +114,7 @@ bindsym Mod4 + Control + Shift + r exec --no-startup-id ~/.config/polybar/script
 ```
 
 You can also open the current news with a keyboard shortcut by binding the
-follow command:
+following command:
 
 ```
 ${HOME}/.config/polybar/scripts/news/news.sh url
