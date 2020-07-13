@@ -118,5 +118,12 @@ or for [i3wm](https://i3wm.org/) this line to `~/.config/i3/config`:
 bindsym Mod4 + Control + Shift + r exec --no-startup-id ~/.config/polybar/scripts/news/news.sh show_menu
 ```
 
+You can also open the current news with a keyboard shortcut by binding the
+follow command:
+
+```
+${HOME}/.config/polybar/scripts/news/news.sh url
+```
+
 ## License
 This software is licensed under the MIT license. See [LICENSE](LICENSE.md).
