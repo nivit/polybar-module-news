@@ -117,7 +117,7 @@ You can also open the current news with a keyboard shortcut by binding the
 following command:
 
 ```
-${HOME}/.config/polybar/scripts/news/news.sh url
+$HOME/.config/polybar/scripts/news/news.sh url
 ```
 
 ## License
