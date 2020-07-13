@@ -6,7 +6,7 @@ so you can read news in your browser by a simple click on the bar.
 You can also find/choose a specific news by a menu (via rofi) opened by
 a keyboard shortcut.
 
-## Screenshots
+## Screenshot
 
 <figure>
 <img alt="Animated gif of the menu with all news" src="screenshots/polybar-module-news-menu.gif" width="860">
