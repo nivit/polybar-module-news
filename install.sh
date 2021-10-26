@@ -33,9 +33,9 @@ else  # update
 
   if [ -f "${destdir}"/config.rasi ] &&
       [ ! -f "${destdir}/conf/config.rasi" ]; then
-    install -U -b -m 644 "${destdir}"/config.rasi "${destdir}"/conf/
     sed -i '' -e 's,\(scripts/news\)\(/news-theme.rasi\),\1/conf\2,1' \
-      "${destdir}"/conf/config.rasi
+      "$(realpath "${destdir}"/config.rasi)"
+    install -U -b -m 644 "${destdir}"/config.rasi "${destdir}"/conf/
   fi
 
   if [ -f "${destdir}"/module.conf ] &&
@@ -58,15 +58,19 @@ else  # update
     sed -i '' -e 's,\(scripts/news\)\(/config.rasi\),\1/conf\2,1' \
         -e 's,add\(_ellipsis\),use\1,1' \
         -e 's,menu\(_prompt\),search\1,1' \
-      "${destdir}"/conf/news.conf
+        "$(realpath "${destdir}"/conf/news.conf)"
     if [ -f "updates/2.x.x_to_${module_version}.txt" ]; then
       cat updates/2.x.x_to_"${module_version}.txt" >> "${destdir}"/conf/news.conf
     fi
   fi
 
-  if [ -f "${polybar_conf}" ] && \
-    ! /usr/bin/grep -q '^; \[module/news\]' "${polybar_conf}"; then
+  if [ -f "${polybar_conf}" ]; then
+    if ! /usr/bin/grep -q '^; \[module/news\]' "${polybar_conf}"; then
       cat polybar.conf >> "${polybar_conf}"
+    else
+      sed -i '' -e 's,\(scripts/news\)\(/module.conf\),\1/conf\2,1' \
+        "$(realpath "${polybar_conf}")"
+    fi
   fi
 fi
 
