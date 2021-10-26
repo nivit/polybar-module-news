@@ -15,7 +15,7 @@ You can also search/choose a specific news/podcast through a menu (via
 <figcaption>The menu with all news opened above the bar</figcaption>
 </figure>
 
-## Installation/Updating
+## Installation/Update
 Clone (or [download](https://github.com/nivit/polybar-module-news/releases)) this repository:
 
 ```
@@ -27,11 +27,6 @@ then run the following commands:
 ```
 $ cd polybar-module-news  # directory where you cloned the repository or unzipped the release file
 $ sh install.sh
-```
-
-To update the module run the following command:
-```
-$ sh install.sh update
 ```
 
 Add links of your favorite news/podcast sites to
