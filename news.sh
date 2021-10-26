@@ -21,7 +21,7 @@ news_prefix=""
 use_colors="yes"
 # a list of colors, separated by spaces, for the headlines
 # see https://colorhunt.co/palettes or https://colorswall.com/ for some hint
-colors="#ff0000,#00ff00,#0000ff"
+colors="#28FFBF #FFEF76 #49FF00"
 error_bg_color="#F44336"
 error_fg_color="#FFFFFF"
 warning_bg_color="#FFC107"
@@ -658,12 +658,9 @@ setup() {
         exit 0
     fi
 
-    if [ "${breaking_news}" = "yes" ] &&
-        [ ! -f "${feeds_list_breaking_news}" ]; then
-            /usr/bin/touch "${feeds_list_breaking_news}"
-        exit 0
+    if [ ! -f "${feeds_list_breaking_news}" ]; then
+        /usr/bin/touch "${feeds_list_breaking_news}"
     fi
-
 
     if [ "${show_menu}" = "yes" ]; then
         if ! command -v rofi > /dev/null 2>&1; then
