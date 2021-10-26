@@ -373,7 +373,7 @@ download_feeds() {
     fi
 
     (
-        touch "${file_lock}"
+        /usr/bin/touch "${file_lock}"
 
         # shellcheck disable=SC2086,SC2046
         "${python_cmd}" "${download_script}" -n "${max_news}" \
@@ -410,7 +410,7 @@ change_colors() {
             echo "Downloading news/podcast in progress. Wait a moment, please!"
             exit 0
         else
-            touch "${file_lock}"
+            /usr/bin/touch "${file_lock}"
             mv -f "${new_status_file}" "${status_file}"
             rm -f "${file_lock}"
         fi
@@ -458,7 +458,7 @@ check_feeds() {
 
     update_feeds "${new_status}" "${feeds_list}" 0
 
-    (touch "${file_lock}"
+    (/usr/bin/touch "${file_lock}"
     mv -f "${new_status}" "${status_file}"
     rm -f "${file_lock}")
 }
@@ -550,7 +550,7 @@ select_feeds() {
             new_status=$(mktemp)
             awk 'BEGIN {FS="\t"; OFS="\t"} {$1=0; $3=0; print $0}' \
             "${status_file}" > "${new_status}"
-            (touch "${file_lock}";
+            (/usr/bin/touch "${file_lock}";
             cp -f "${new_status}" "${status_file}"
             rm -f "${file_lock}"
             rm -f "${new_status}"*)
@@ -582,7 +582,7 @@ select_feeds() {
                 "${new_status}"
         done
 
-        (touch "${file_lock}";
+        (/usr/bin/touch "${file_lock}";
         cp -f "${new_status}" "${status_file}"
         rm -f "${file_lock}"
         rm -f "${new_status}"*)
