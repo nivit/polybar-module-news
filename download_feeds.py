@@ -182,7 +182,6 @@ def write_news_file(filename, news, media_link):
     ...
     """
 
-
     with open(filename, 'w', encoding='utf-8') as news_file:
         for entry in news:
             news_file.write(get_news(entry, media_link))
