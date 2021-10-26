@@ -1,0 +1,43 @@
+quiet_mode="no"  # no output if there are no news
+
+show_date="yes"  # display the date of the news/podcast, if available
+
+date_as_prefix="yes"  # otherwise as suffix if show_date="yes"
+
+date_format="%d %b. %R -"  # see manpage strftime(3) for more conversion specifications
+
+show_prefix="yes"
+
+# RSS icon, code U+F09E, requires a switable font such as Awesome Font
+news_prefix=""
+
+use_colors="yes"
+
+# a list of colors, separated by spaces, for the headlines
+# see https://colorhunt.co/palettes or https://colorswall.com/ for some hint
+colors="#ff0000,#00ff00,#0000ff"
+
+reverse_order="yes"  # display news in the reverse order
+
+# Use a link to a multimedial file if available
+media_link="yes"
+
+audio_player="gmplayer"
+
+# https://github.com/mpv-player/mpv/blob/master/TOOLS/umpv
+# video_player="umpv"
+video_player="mpv"
+
+# the icons require a suitable font such as Font Awesome
+audio_prefix=" (audio)"
+video_prefix=" (video)"
+
+search_prompt="Search"
+
+# max number of news to show per feed, 0 (i.e. all news) or a whole number
+max_news=0
+
+open_cmd="xdg-open"
+
+breaking_news="no"
+
