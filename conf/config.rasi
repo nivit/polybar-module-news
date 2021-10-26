@@ -1,5 +1,5 @@
-/* 
- * see rofi(1) for a complete description of all options
+/*
+ * see manpage rofi(1) for a complete description of all options
  */
 configuration {
 	width: 40;  /* if negative, it means a character width, otherwise a percentage of monitor */
