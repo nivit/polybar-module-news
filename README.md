@@ -1,10 +1,12 @@
-# Polybar Module - News
+# Polybar Module - News & Podcasts
 
 ## Description
-This [polybar](https://github.com/jaagr/polybar) module displays RSS/Atom feeds,
-so you can read news in your browser by a simple click on the bar.
-You can also find/choose a specific news by a menu (via rofi) opened by
-a keyboard shortcut.
+This [polybar](https://github.com/jaagr/polybar) module displays news and
+podcast titles, so you can read/listen to them in your browser/audio|video
+player with a simple click on the bar.
+You can also search/choose a specific news/podcast through a menu (via
+[rofi](https://github.com/adi1090x/rofi)) opened by a keyboard shortcut.
+
 
 ## Screenshot
 
@@ -14,7 +16,14 @@ a keyboard shortcut.
 </figure>
 
 ## Installation/Updating
-Clone or download this repository, then run the following commands:
+Clone (or [download](https://github.com/nivit/polybar-module-news/releases)) this repository:
+
+```
+git clone https://github.com/nivit/polybar-module-news.git
+```
+
+then run the following commands:
+
 ```
 $ cd polybar-module-news  # directory where you cloned the repository or unzipped the release file
 $ sh install.sh
@@ -25,7 +34,13 @@ To update the module run the following command:
 $ sh install.sh update
 ```
 
-Add your favorite RSS/Atom feeds to `~/.config/.polybar/scripts/news/rss.feeds`
+Add links of your favorite news/podcast sites to
+
+`~/.config/.polybar/scripts/news/conf/feeds_list`
+
+and/or to
+
+`~/.config/.polybar/scripts/news/conf/feeds_list_breaking_news`
 
 Enable this module in your bar, e.g:
 ```
@@ -42,53 +57,86 @@ Configure the module (see below) and then restart polybar.
 ## Dependencies
 This script requires
 - [python](https://www.python.org) 3;
-- python module [feedparser](https://github.com/kurtmckee/feedparser) (install it with `pip3 install --user feedparser` or with your package manager);
-- [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news link);
-- [rofi](https://github.com/davatorium/rofi) (optional dependency to show a menu with all news).
+- python module [feedparser](https://github.com/kurtmckee/feedparser) (install
+it with `pip3 install --user feedparser` or with your package manager);
+- [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/) (to open news
+link);
+- [rofi](https://github.com/davatorium/rofi) (optional dependency to show a menu
+with all news);
+- an audio/video player (optional dependency) to open podcast files.
 
-N.B. After installing Python 3 and/or feedparser/rofi you need to wait about 10 seconds before the error message of missing requirement disappears.
+N.B. After installing Python 3 and the other dependencies you need to wait about
+10 seconds before the error message of missing requirement disappears.
 
 ## Configuration
-Edit the file `~/.config/polybar/scripts/news/news.conf` and set up the right Python 3 interpreter.
+Edit the file `~/.config/polybar/scripts/news/conf/news.conf` and set up the
+right Python 3 interpreter.
 
 All available options:
 
-```
-python_cmd=python3  # or python3.6, etc.
 
-show_site="yes"  # display the name of the RSS/Atom source
-use_colors="yes"  # for error/warning
+| name             | description                                                                                             | default value                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| quiet_mode       | no output if there are no news/podcasts titles                                                          | no                                                    |
+| show_site        | show the name of the site as prefix to the title                                                        | yes                                                   |
+| show_date        | show the news date, if available                                                                        | yes                                                   |
+| date_as_prefix   | show the date before the title (otherwise as suffix), if show_date=yes                                  | yes                                                   |
+| date_format      | see manpage strftime(3) for the conversation specs.                                                     | %d %b. %R -                                           |
+| show_prefix      | show icon, date and site name                                                                           | yes                                                   |
+| news_prefix      | the prefix to show before the title                                                                     | the character U+F09E                                  |
+| use_colors       | for news/podcast title and diagnostic messages                                                          | yes                                                   |
+| colors           | a list of colors, separated by spaces or commas, to use for the news titles                             | #ff0000,#00ff00,#0000ff (RGB)                         |
+| error_bg_color   | background color for error messages                                                                     | #F44336                                               |
+| error_fg_color   | foreground color for error messages                                                                     | #FFFFFF                                               |
+| warning_bg_color | background color for warning messages                                                                   | #FFC107                                               |
+| warning_fg_color | foreground color for the warning messages                                                               | #212121                                               |
+| reverse_order    | reverse the order of the news in the search list                                                        | yes                                                   |
+| show_menu        | display a menu with all news (via rofi, right click)                                                    | yes                                                   |
+| menu_lines       | number of news to show in the menu, definible also in config.rasi, (height of menu)                     | 20                                                    |
+| media_link       | use link to a multimedial file if available                                                             | yes                                                   |
+| audio_player     | program to open audio files of podcast                                                                  | gmplayer                                              |
+| video_player     | program to open video files of podcast                                                                  | mpv                                                   |
+| audio_prefix     | prefix for the audio titles                                                                             |  U+F2CE (audio)                                      |
+| video_prefix     | prefix for the video titles                                                                             |  U+F144 (video)                                      |
+| search_prompt    | string to use as search prompt                                                                          | "Search"                                              |
+| max_news         | max number of news per feed (a whole number or 0 for all news). It takes effect with the next download. | 0                                                     |
+| length           | number of characters for the output to the bar; zero means no limit                                     | 0                                                     |
+| use_ellipsis     | add ... where the title length is > 0                                                                   | yes                                                   |
+| open_cmd         | program for opening URLs                                                                                | xdg-open                                              |
+| breaking_news    | enable breaking news (see below)                                                                        | yes                                                   |
+| rofi_config      | path to the rofi configuration file                                                                     | ${HOME}/.config/polybar/scripts/news/conf/config.rasi |
+| rofi_width       | width of the rofi menu (see rofi(1))                                                                    | auto                                                  |
+| python_cmd       | a python 3 interpreter                                                                                  | python3                                               |
 
-# show a menu of all news (via rofi)
-# the menu is activated by a right-click on the bar
-show_menu="yes"
-# number of news to show in the menu
-# you can also define it in config.rasi
-menu_lines="20"
-menu_prompt="Find news"
-rofi_config="${HOME}/.config/polybar/scripts/news/config.rasi"
-rofi_width="auto"  # (auto or empty)  # see rofi(1)
-
-# number of characters for the output
-# zero means no limit
-length=0
-# used only when the title is shortened, i.e when length > 0
-add_ellipsis="yes"
-
-# default colors for error/warning
-error_bg_color="#F44336"
-error_fg_color="#FFFFFF"
-warning_bg_color="#FFC107"
-warning_fg_color="#212121"
-```
 
 You can change the interval between two headlines by editing the relative option
 in the following file:
 ```
-~/.config/polybar/scripts/news/module.conf
+~/.config/polybar/scripts/news/conf/module.conf
 ```
 
-To configure the menu you can edit the file ``` ~/.config/polybar/scripts/news/config.rasi```.
+To configure the menu you can edit the file ``` ~/.config/polybar/scripts/news/conf/config.rasi```.
+
+## Breaking News Configuration
+Add the feed URL of the breaking news sites to
+
+`~/.config/polybar/scripts/news/conf/feeds_list_breaking_news`
+
+then, in your terminal, run the command:
+
+`crontab -e`
+
+and add the following line:
+
+`/usr/bin/python3 $HOME/.config/polybar/scripts/news/download_feeds.py -c '#0cffc8,#cae970' -l 5 $HOME/.config/polybar/scripts/news/data`
+
+then save and exit the editor.
+
+Change the list of colors after the `-c` option, and the number of minutes after
+the option `-l`, if you want.
+
+When the headlines are available, they take immediately precedence over other
+news.
 
 ## Running
 Click on the news headline on the bar to open the relative web page in your
@@ -117,8 +165,35 @@ You can also open the current news with a keyboard shortcut by binding the
 following command:
 
 ```
-$HOME/.config/polybar/scripts/news/news.sh url
+$HOME/.config/polybar/scripts/news/news.sh open
 ```
+
+To select the feeds at runtime, you can bind the following command to a keyboard
+shortcut or run it from a terminal:
+
+```
+$HOME/.config/polybar/scripts/news/news.sh select
+```
+
+You can always force a download with the command:
+
+```
+$HOME/.config/polybar/scripts/news/news.sh download
+```
+
+## Notes
+1. The feed URL of a site is generally available at `/feed/` address, but you
+can also find it by searching for an RSS icon in the page or viewing its HTML
+page source;
+2. in the feed title the tag `[BN]` marks a breaking news site;
+3. see the site https://colorhunt.co/palettes or https://colorswall.com/ for some
+hint of colors;
+4. to see icons you need to install a suitable font like Font Awesome;
+5. as video player you could consider the program
+[umpv](https://github.com/mpv-player/mpv/blob/master/TOOLS/umpv).
+6. if you think this script is useful, add a star to the repository, please!
+:wink:
 
 ## License
 This software is licensed under the MIT license. See [LICENSE](LICENSE.md).
+
