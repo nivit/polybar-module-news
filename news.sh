@@ -636,7 +636,8 @@ setup() {
         mkdir -p "${datadir}"
     fi
 
-    if [ ! -s "${status_file}" ]; then
+    if [ ! -s "${status_file}" ] ||
+            [ ! -f "${status_file}" ]; then
         init_status_file
         news_number="$(cut -f 2-4 "${status_file}" | \
             awk '{if ($2 == 1 && $3 == 0) {total=total+$1}} END {print total}')"
