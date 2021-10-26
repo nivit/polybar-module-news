@@ -85,7 +85,7 @@ All available options:
 | show_prefix      | show icon, date and site name                                                                           | yes                                                   |
 | news_prefix      | the prefix to show before the title                                                                     | the character U+F09E                                  |
 | use_colors       | for news/podcast title and diagnostic messages                                                          | yes                                                   |
-| colors           | a list of colors, separated by spaces or commas, to use for the news titles                             | #ff0000,#00ff00,#0000ff (RGB)                         |
+| colors           | a list of colors, separated by spaces or commas, to use for the news titles                             | #28FFBF #FFEF78 #49FF00                               |
 | error_bg_color   | background color for error messages                                                                     | #F44336                                               |
 | error_fg_color   | foreground color for error messages                                                                     | #FFFFFF                                               |
 | warning_bg_color | background color for warning messages                                                                   | #FFC107                                               |
