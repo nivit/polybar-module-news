@@ -15,7 +15,7 @@ use_colors="yes"
 
 # a list of colors, separated by spaces, for the headlines
 # see https://colorhunt.co/palettes or https://colorswall.com/ for some hint
-colors="#ff0000,#00ff00,#0000ff"
+colors="#28FFBF #FFEF76 #49FF00"
 
 reverse_order="yes"  # display news in the reverse order
 
@@ -31,8 +31,6 @@ video_player="mpv"
 # the icons require a suitable font such as Font Awesome
 audio_prefix=" (audio)"
 video_prefix=" (video)"
-
-search_prompt="Search"
 
 # max number of news to show per feed, 0 (i.e. all news) or a whole number
 max_news=0
