@@ -660,7 +660,7 @@ setup() {
 
     if [ "${breaking_news}" = "yes" ] &&
         [ ! -f "${feeds_list_breaking_news}" ]; then
-            print_msg error "no feeds file found for breaking news!"
+            /usr/bin/touch "${feeds_list_breaking_news}"
         exit 0
     fi
 
