@@ -14,14 +14,14 @@ if [ ! -d "${destdir}" ]; then
 
   install -d "${destdir}"
   install -d "${destdir}/conf"
-  install -b -m 644 ./*.conf ./*.rasi feeds_list* "${destdir}/conf"
+  install -b -m 644 conf/* "${destdir}/conf"
 
   if [ -f "${polybar_conf}" ] && \
       ! /usr/bin/grep -q '^; \[module/news\]' "${polybar_conf}"; then
-    cat polybar.conf >> "${polybar_conf}"
+    cat conf/polybar.conf >> "${polybar_conf}"
   else
-    echo "-- Add the following lines to your polybar configuration --"
-    cat polybar.conf
+    echo '-- Add the following lines to your polybar configuration --'
+    cat conf/polybar.conf
   fi
 else  # update
   # backup all stuff
@@ -33,7 +33,7 @@ else  # update
 
   if [ -f "${destdir}"/config.rasi ] &&
       [ ! -f "${destdir}/conf/config.rasi" ]; then
-    sed -i'' -e 's,\(scripts/news\)\(/news-theme.rasi\),\1/conf\2,1' \
+    sed -i.bak -e 's,\(scripts/news\)\(/news-theme.rasi\),\1/conf\2,1' \
       "$(realpath "${destdir}"/config.rasi)"
     install -b -m 644 "${destdir}"/config.rasi "${destdir}"/conf/
   fi
@@ -55,7 +55,7 @@ else  # update
 
   if [ -f "${destdir}"/news.conf ]; then
     install -b -m 644 "${destdir}"/news.conf "${destdir}"/conf/
-    sed -i'' -e 's,\(scripts/news\)\(/config.rasi\),\1/conf\2,1' \
+    sed -i.bak -e 's,\(scripts/news\)\(/config.rasi\),\1/conf\2,1' \
         -e 's,add\(_ellipsis\),use\1,1' \
         -e 's,menu\(_prompt\),search\1,1' \
         "$(realpath "${destdir}"/conf/news.conf)"
@@ -68,10 +68,12 @@ else  # update
     if ! /usr/bin/grep -q '^; \[module/news\]' "${polybar_conf}"; then
       cat polybar.conf >> "${polybar_conf}"
     else
-      sed -i'' -e 's,\(scripts/news\)\(/module.conf\),\1/conf\2,1' \
+      sed -i.bak -e 's,\(scripts/news\)\(/module.conf\),\1/conf\2,1' \
         "$(realpath "${polybar_conf}")"
     fi
   fi
+  # left over
+  echo "-- You can remove ${destdir}/config.rasi, if you want --"
 fi
 
 install -m 554 ./*.py "${destdir}"
@@ -85,9 +87,9 @@ rm -f "${destdir}"/rss.feeds
 rm -f "${destdir}"/news-theme.rasi
 rm -f "${destdir}"/polybar.conf
 rm -Rf "${destdir}"/obj
+rm -f "${destdir}"/*.bak
+rm -f "${destdir}"/conf/*.bak
 
-echo "-- Module news&podcast installed/updated! --"
+echo '-- Module news&podcast installed/updated! --'
 
-# left over
-echo "-- You can remove ${destdir}/config.rasi, if you want --"
 
