@@ -37,5 +37,5 @@ max_news=0
 
 open_cmd="xdg-open"
 
-breaking_news="no"
+breaking_news="yes"
 
