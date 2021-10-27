@@ -215,7 +215,7 @@ parse_news_line() {
         add_date
     fi
 
-    if [ "${show_prefix}" = "yes" ] && [ "${seconds}" !=  "0" ]; then
+    if [ "${show_prefix}" = "yes" ]; then
         add_prefix
     fi
 
@@ -462,6 +462,11 @@ check_feeds() {
 
     feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}")"
 
+    if [ ! -f "${checksum_file}" ] || [ ! -s "${checksum_file}" ]; then
+        printf "%s" "${feeds_list_checksum}" > "${checksum_file}"
+        return
+    fi
+
     if [ "$(cat "${checksum_file}")" = "${feeds_list_checksum}" ]; then
         return
     else
@@ -703,11 +708,6 @@ setup() {
         [ "${os_name}" = "NetBSD" ]; then
         grep_cmd="/usr/bin/grep"
         md5_cmd="/sbin/md5"
-    fi
-
-    if [ ! -f "${checksum_file}" ] || [ ! -s "${checksum_file}" ]; then
-        feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}")"
-        printf "%s" "${feeds_list_checksum}" > "${checksum_file}"
     fi
 
     md5_colors="$( get_md5_checksum "${colors}" )"
