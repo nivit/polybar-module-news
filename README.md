@@ -123,12 +123,18 @@ then, in your terminal, run the command:
 
 and add the following line:
 
-`/usr/bin/python3 $HOME/.config/polybar/scripts/news/download_feeds.py -c '#0cffc8,#cae970' -l 5 $HOME/.config/polybar/scripts/news/data`
+`*/5 * * * * /usr/bin/python3 $HOME/.config/polybar/scripts/news/download_feeds.py -c '#0cffc8,#cae970' -l 5 $HOME/.config/polybar/scripts/news/data`
 
 then save and exit the editor.
 
 Change the list of colors after the `-c` option, and the number of minutes after
-the option `-l`, if you want.
+the first slash and the option `-l`, if you want.
+
+Change the value of the variable breaking_news to "yes" in the configuration file:
+
+```
+~/.config/polybar/scripts/news/conf/news.conf
+```
 
 When the headlines are available, they take immediately precedence over other
 news.
