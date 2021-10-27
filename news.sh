@@ -81,7 +81,6 @@ readonly select_message='
   <b>They must be selected again if necessary</b>.
 '
 
-date_options="-d @"  # Linux's date command options
 # files with a list of URLs to fetch
 feeds_list="${conf_dir}/feeds_list"
 feeds_list_breaking_news="${conf_dir}/feeds_list_breaking_news"
@@ -126,7 +125,11 @@ lines_number() {
 
 add_date() {
     if [ "${seconds}" != "0" ]; then
-        news_date="$(/bin/date "${date_options}""${seconds}" +"${date_format}")"
+        if [ "${os_name}" = "Linux" ]; then
+            news_date="$(/bin/date -d @"${seconds}" +"${date_format}")"
+        else
+            news_date="$(/bin/date -jf %s "${seconds}" +"${date_format}")"
+        fi
 
         if [ "${date_as_prefix}" = "yes" ]; then
             news_title="${news_date} ${news_title}"
@@ -590,7 +593,7 @@ select_feeds() {
         # activate only the choosen feeds
         echo "${feeds_numbers}" | \
         while IFS= read -r ln; do
-            sed -E -i'' "${ln}s/^([0-9]+)\t([0-9]+)\t[01]/\2\t\2\t1/1" \
+            sed -E -i.bak "${ln}s/^([0-9]+)\t([0-9]+)\t[01]/\2\t\2\t1/1" \
                 "${new_status}"
         done
 
@@ -696,7 +699,6 @@ setup() {
     if [ "${os_name}" = "FreeBSD" ] || \
         [ "${os_name}" = "OpenBSD" ] || \
         [ "${os_name}" = "NetBSD" ]; then
-        date_options="-jf %s "
         grep_cmd="/usr/bin/grep"
         md5_cmd="/sbin/md5"
     fi
@@ -765,7 +767,7 @@ main() {
 
             # update status file
             new_index=$((news_index - 1))
-            sed -i'' -e "/${filename##*/}/s/^${news_index}/${new_index}/1" "${status_file}"
+            sed -i.bak -e "/${filename##*/}/s/^${news_index}/${new_index}/1" "${status_file}"
 
             # save news URL
             /usr/bin/printf "%s" "${news_line}" > "${news_url}"
