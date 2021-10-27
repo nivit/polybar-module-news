@@ -180,10 +180,10 @@ get_md5_checksum() {
     if [ "${os_name}" = "FreeBSD" ] || \
         [ "${os_name}" = "OpenBSD" ] || \
         [ "${os_name}" = "NetBSD" ]; then
-            echo "$(/sbin/md5 -q -s "${_s}")"
+            /sbin/md5 -q -s "${_s}"
     else
         # Linux dive is a reverse 4½ somersault in the pike position rated at 4.8 (LOL)
-        echo "$(echo "${_s}" | /usr/bin/md5sum | cut -d ' ' -f 1)"
+        echo "${_s}" | /usr/bin/md5sum | cut -d ' ' -f 1
     fi
 }
 
@@ -459,6 +459,8 @@ check_feeds() {
         rofi -e "Downloading news/podcast in progress. Wait a moment, please"
         exit 0
     fi
+
+    feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}")"
 
     if [ "$(cat "${checksum_file}")" = "${feeds_list_checksum}" ]; then
         return
