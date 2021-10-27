@@ -126,7 +126,7 @@ lines_number() {
 
 add_date() {
     if [ "${seconds}" != "0" ]; then
-        news_date="$(/bin/date "${date_options}" "${seconds}" +"${date_format}")"
+        news_date="$(/bin/date "${date_options}""${seconds}" +"${date_format}")"
 
         if [ "${date_as_prefix}" = "yes" ]; then
             news_title="${news_date} ${news_title}"
@@ -170,6 +170,19 @@ add_ellipsis() {
     fi
 }
 
+get_md5_checksum() {
+
+    _s="${1}"
+
+    if [ "${os_name}" = "FreeBSD" ] || \
+        [ "${os_name}" = "OpenBSD" ] || \
+        [ "${os_name}" = "NetBSD" ]; then
+            echo "$(/sbin/md5 -q -s "${_s}")"
+    else
+        # Linux dive is a reverse 4½ somersault in the pike position rated at 4.8 (LOL)
+        echo "$(echo "${_s}" | /usr/bin/md5sum | cut -d ' ' -f 1)"
+    fi
+}
 
 parse_news_line() {
     # parse a line of a news file (datadir/_*)
@@ -478,7 +491,7 @@ update_feeds() {
             _hash_salt="${hash_salt}"
             _BN="[BN]"
         fi
-        url_hash="_$(md5 -q -s "${url}${_hash_salt}")"
+        url_hash="_$(get_md5_checksum "${url}${_hash_salt}")"
         n_line="$(${grep_cmd} -n "${url_hash}" "${status_file}")"
         n="$(echo "${n_line}" | cut -d : -f 1)"
 
@@ -546,7 +559,8 @@ select_feeds() {
         fi
 
         # user deselected all feeds
-        if [ "${feeds_numbers}" = "-1" ]; then
+        if [ "${feeds_numbers}" = "-1" ] || 
+                [ "${feeds_numbers}" = "0" ]; then
             new_status=$(mktemp)
             awk 'BEGIN {FS="\t"; OFS="\t"} {$1=0; $3=0; print $0}' \
             "${status_file}" > "${new_status}"
@@ -558,13 +572,11 @@ select_feeds() {
         fi
 
         temp_file=$(mktemp)
-        echo "${feeds_numbers}"
         echo "${feeds_numbers}" | \
         while IFS= read -r feed_number; do
             url="$(cat "${feeds_list_breaking_news}" "${feeds_list}" | \
                 sed -n -e "${feed_number}p")"
-            url_hash="_$("${md5_cmd}" -q -s "${url}")"
-            echo "B${breaking_news}B"
+            url_hash="_$(get_md5_checksum "${url}")"
             if [ ! -f "${datadir}/${url_hash}" ]; then
                 echo "yes" > "${temp_file}"
                 break
@@ -578,7 +590,7 @@ select_feeds() {
         # activate only the choosen feeds
         echo "${feeds_numbers}" | \
         while IFS= read -r ln; do
-            sed -E -i '' "${ln}s/^([0-9]+)\t([0-9]+)\t[01]/\2\t\2\t1/1" \
+            sed -E -i'' "${ln}s/^([0-9]+)\t([0-9]+)\t[01]/\2\t\2\t1/1" \
                 "${new_status}"
         done
 
@@ -608,7 +620,7 @@ init_status_file() {
     if [ -f "${feeds_list_breaking_news}" ] &&
         [ "${breaking_news}" = "yes" ]; then
         while IFS= read -r url; do
-            url_hash="_$(md5 -q -s "${url}${hash_salt}")"
+            url_hash="_$(get_md5_checksum "${url}${hash_salt}")"
             /usr/bin/printf "0\t0\t1\t1\t%s\t\t\t\t%s\t\t\n" \
                 "${url_hash}" "${url}" >> "${status_file}"
         done < "${feeds_list_breaking_news}"
@@ -616,7 +628,7 @@ init_status_file() {
 
     if [ -f "${feeds_list}" ]; then
         while IFS= read -r url; do
-            url_hash="_$(md5 -q -s "${url}")"
+            url_hash="_$(get_md5_checksum "${url}")"
             /usr/bin/printf "0\t0\t1\t0\t%s\t\t\t\t%s\t\t\n" \
                 "${url_hash}" "${url}" >> "${status_file}"
         done < "${feeds_list}"
@@ -690,11 +702,11 @@ setup() {
     fi
 
     if [ ! -f "${checksum_file}" ] || [ ! -s "${checksum_file}" ]; then
-        feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}" -q)"
+        feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}")"
         printf "%s" "${feeds_list_checksum}" > "${checksum_file}"
     fi
 
-    md5_colors="$( "${md5_cmd}" -q -s "${colors}" )"
+    md5_colors="$( get_md5_checksum "${colors}" )"
     if [ ! -f "${status_colors}" ]; then
         /usr/bin/printf "%s" "${md5_colors}" > "${status_colors}"
         return
@@ -753,7 +765,7 @@ main() {
 
             # update status file
             new_index=$((news_index - 1))
-            sed -i '' -e "/${filename##*/}/s/^${news_index}/${new_index}/1" "${status_file}"
+            sed -i'' -e "/${filename##*/}/s/^${news_index}/${new_index}/1" "${status_file}"
 
             # save news URL
             /usr/bin/printf "%s" "${news_line}" > "${news_url}"
