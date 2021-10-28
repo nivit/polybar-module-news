@@ -777,16 +777,12 @@ main() {
             # show news on the bar
             /usr/bin/printf "%s" "${output}"
             exit 0
-        elif [ "$1" = "open" ]; then
+        elif [ "$1" = "open" ] || [ "$1" = "url" ]; then
             parse_news_line "$(cat "${news_url}")"
             "${open_cmd}" "${url}"&
             exit 0
         elif [ "$1" = "search" ] || [ "$1" = "show_menu" ]; then
             search
-            exit 0
-        elif [ "$1" = "url" ]; then
-            parse_news_line "$(cat "${news_url}")"
-            cat "${news_url}"&
             exit 0
         elif [ "$1" = "download" ]; then
             print_msg warning "Downloading news/podcasts feeds"
