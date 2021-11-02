@@ -147,21 +147,22 @@ def get_news(entry, media_link=False):
     """
 
     media_type = 'text/html'
-    entry_link = entry.link
 
     if media_link:
         media_types = ['audio', 'video']
     else:
         media_types = ['text']
 
-    links = entry.get('links', entry.link)
+    entry_link = entry.get('link', '')
+
+    links = entry.get('links', entry_link)
 
     if hasattr(entry, 'published_parsed'):
         entry_published = str(calendar.timegm(entry.published_parsed))
     else:
         entry_published = 0
 
-    if links != entry.link:
+    if links != entry_link:
         matching = [link for link in links if link.type.split(
             '/')[0] in media_types]
         if matching:
