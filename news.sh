@@ -341,8 +341,7 @@ search() {
                 news_line="$(sort -k2 "${reverse_order}" "${filename}" | \
                     sed -n -e "${index}p")"
                 parse_news_line "${news_line}"
-                ${open_cmd} "${url}"
-                exit 0
+                exec ${open_cmd} "${url}"
             fi
             range="$((range + available_news))"
         done;
@@ -543,6 +542,7 @@ select_feeds() {
         ' "${status_file}" | sed -e 's,\,$,,1')"
 
         feeds_number="$(lines_number "${feeds_list}")"
+        feeds_number="$(( feeds_number + $(lines_number "${feeds_list_breaking_news}") ))"
 
         if [ "${feeds_number}" -lt "${menu_lines}" ]; then
             menu_lines="${feeds_number}"
@@ -779,8 +779,7 @@ main() {
             exit 0
         elif [ "$1" = "open" ] || [ "$1" = "url" ]; then
             parse_news_line "$(cat "${news_url}")"
-            "${open_cmd}" "${url}"&
-            exit 0
+            exec "${open_cmd}" "${url}"
         elif [ "$1" = "search" ] || [ "$1" = "show_menu" ]; then
             search
             exit 0
