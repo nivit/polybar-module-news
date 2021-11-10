@@ -148,6 +148,7 @@ def get_news(entry, media_link=False):
 
     media_type = 'text/html'
 
+
     if media_link:
         media_types = ['audio', 'video']
     else:
@@ -168,6 +169,9 @@ def get_news(entry, media_link=False):
         if matching:
             media_type = matching[0].type
             entry_link = matching[0].href
+
+    if len(entry_link) == 0:
+        entry_link = entry.title_detail.get('href', '')
 
     title = html.unescape(entry.title)
 
