@@ -185,7 +185,8 @@ $HOME/.config/polybar/scripts/news/news.sh download
 ## Notes
 1. The feed URL of a site is generally available at `/feed/` address, but you
 can also find it by searching for an RSS icon in the page or viewing its HTML
-page source;
+page source. You may also use the [Ukora news
+search](https://www.rsssearchhub.com) engine;
 2. in the feed title the tag `[BN]` marks a breaking news site;
 3. see the site https://colorhunt.co/palettes or https://colorswall.com/ for some
 hint of colors;
