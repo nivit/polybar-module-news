@@ -193,8 +193,6 @@ hint of colors;
 4. to see icons you need to install a suitable font like Font Awesome;
 5. as video player you could consider the program
 [umpv](https://github.com/mpv-player/mpv/blob/master/TOOLS/umpv).
-6. if you think this script is useful, add a star to the repository, please!
-:wink:
 
 ## License
 This software is licensed under the MIT license. See [LICENSE](LICENSE.md).

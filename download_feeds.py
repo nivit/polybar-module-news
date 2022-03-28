@@ -44,6 +44,17 @@ except ImportError:
     sys.exit(0)
 
 
+def myDateHandler(aDateString):
+    """parse a UTC date in DD/MM/YYYY format"""
+    _my_date_pattern = re.compile(
+        r'(\d{,2})/(\d{,2})/(\d{4})')
+
+    day, month, year, hour, minute, second = \
+        _my_date_pattern.search(aDateString).groups()
+    return (int(year), int(month), int(day), \
+        0, 0, 0, 0, 0, 0)
+
+
 def parse_args():
     """
     Return a list of command line arguments (using argparse module).
@@ -247,6 +258,7 @@ def main(args):
                 modified = ''
 
             try:
+                feedparser.registerDateHandler(myDateHandler)
                 feed = feedparser.parse(
                     temp_feed.url,
                     etag=etag,
