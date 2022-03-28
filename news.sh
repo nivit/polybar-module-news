@@ -422,7 +422,7 @@ change_colors() {
         done < "${status_file}" > "${new_status_file}"
 
         if [ -f "${file_lock}" ]; then
-            echo "Downloading news/podcast in progress. Wait a moment, please!"
+            print_msg warning "Downloading news/podcasts feeds"
             exit 0
         else
             /usr/bin/touch "${file_lock}"
@@ -455,6 +455,7 @@ get_rofi_value() {
 check_feeds() {
 
     if [ -f "${file_lock}" ]; then
+        print_msg warning "Downloading news/podcasts feeds"
         exit 0
     fi
 
@@ -514,7 +515,7 @@ update_feeds() {
                         >> "${_new_status}"
             fi
         else
-            /usr/bin/printf "0\t0\t0\t%s\t%s\t\t%s %s[NEW FEED]\t\t%s\t\t\t\n" \
+            /usr/bin/printf "0\t0\t1\t%s\t%s\t\t%s %s[NEW FEED]\t\t%s\t\t\t\n" \
                 "${_breaking_news}"  "${url_hash}" "${url}" "${_BN}" "${url}" \
                 >> "${_new_status}"
         fi
