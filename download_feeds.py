@@ -186,6 +186,9 @@ def get_news(entry, media_link=False):
 
     title = html.unescape(entry.title)
 
+    if len(title) == 0:
+        title = 'ITEM WITHOUT A TITLE'
+
     return f'{media_type}\t{entry_published}\t{entry_link}\t{title}\n'
 
 
@@ -294,13 +297,22 @@ def main(args):
                 if number_of_feed_news != 0:
                     temp_feed.etag = feed.get('etag', '')
                     temp_feed.modified = feed.get('modified', '')
-                    temp_feed.title = feed.feed.get(
-                        'title', f'NO TITLE for {temp_feed.url}')
+                    # XXX method get doesn't always work
+                    # https://gist.github.com/nivit/7bfb1feccba5638c25a07e0a7814e782
+                    #temp_feed.title = feed.feed.get(
+                    #    'title', f'NO TITLE for {temp_feed.url}')
+                    temp_feed.title = feed.feed.title
+                    if len(temp_feed.title) == 0:
+                        temp_feed.title = f'NO TITLE for {temp_feed.url}'
                     temp_feed.max_title_length = str(max(
                         [len(e.title) for e in entries])
                     )
-                temp_feed.title = feed.feed.get(
-                    'title', f'NO TITLE for {temp_feed.url}')
+                # XXX see above
+                #temp_feed.title = feed.feed.get(
+                #    'title', f'NO TITLE for {temp_feed.url}')
+                temp_feed.title = feed.feed.title
+                if len(temp_feed.title) == 0:
+                    temp_feed.title = f'NO TITLE for {temp_feed.url}'
 
                 if temp_feed.breaking_news == '1':
                     temp_feed.title = temp_feed.title + ' [BN]'
