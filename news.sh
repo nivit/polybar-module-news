@@ -455,7 +455,6 @@ get_rofi_value() {
 check_feeds() {
 
     if [ -f "${file_lock}" ]; then
-        rofi -e "Downloading news/podcast in progress. Wait a moment, please"
         exit 0
     fi
 
@@ -525,8 +524,6 @@ update_feeds() {
 
 select_feeds() {
     # function to select what feeds to show in the bar
-
-    check_feeds
 
     setup_rofi
 
@@ -719,6 +716,8 @@ setup() {
     if [ "$( cat "${status_colors}" )" != "${md5_colors}" ]; then
         change_colors
     fi
+
+    check_feeds
 }
 
 
