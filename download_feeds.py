@@ -297,22 +297,14 @@ def main(args):
                 if number_of_feed_news != 0:
                     temp_feed.etag = feed.get('etag', '')
                     temp_feed.modified = feed.get('modified', '')
-                    # method get doesn't always work
-                    # https://gist.github.com/nivit/7bfb1feccba5638c25a07e0a7814e782
-                    #temp_feed.title = feed.feed.get(
-                    #    'title', f'NO TITLE for {temp_feed.url}')
+
+                try:
                     temp_feed.title = feed.feed.title
+                except AttributeError:
+                    temp_feed.title = f'{temp_feed.url}'
+                finally:
                     if len(temp_feed.title) == 0:
-                        temp_feed.title = f'NO TITLE for {temp_feed.url}'
-                    temp_feed.max_title_length = str(max(
-                        [len(e.title) for e in entries])
-                    )
-                # see previous comment
-                #temp_feed.title = feed.feed.get(
-                #    'title', f'NO TITLE for {temp_feed.url}')
-                temp_feed.title = feed.feed.title
-                if len(temp_feed.title) == 0:
-                    temp_feed.title = f'NO TITLE for {temp_feed.url}'
+                        temp_feed.title = f'{temp_feed.url}'
 
                 if temp_feed.breaking_news == '1':
                     temp_feed.title = temp_feed.title + ' [BN]'
