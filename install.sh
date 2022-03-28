@@ -2,7 +2,7 @@
 
 # this script installs the polybar module news
 
-module_version=3.0.0
+module_version=3.0.3
 
 polybar_dir=${polybar_dir:-${HOME}/.config/polybar}
 destdir=${destdir:-${polybar_dir}/scripts/news}

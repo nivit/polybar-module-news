@@ -338,7 +338,7 @@ def main(args):
 
 if __name__ == '__main__':
 
-    __version__ = '3.0.0'
+    __version__ = '3.0.3'
     feedparser.USER_AGENT = f'PMN/{__version__} ' \
         '+https://github.com/nivit/polybar-module-news'
 
