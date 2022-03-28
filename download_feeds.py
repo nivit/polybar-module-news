@@ -49,8 +49,9 @@ def date_handler(date_string):
     _my_date_pattern = re.compile(
         r'(\d{,2})/(\d{,2})/(\d{4})')
 
-    day, month, year, hour, minute, second = \
+    day, month, year = \
         _my_date_pattern.search(date_string).groups()
+
     return (int(year), int(month), int(day), \
         0, 0, 0, 0, 0, 0)
 
