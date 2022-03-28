@@ -44,13 +44,13 @@ except ImportError:
     sys.exit(0)
 
 
-def myDateHandler(aDateString):
+def date_handler(date_string):
     """parse a UTC date in DD/MM/YYYY format"""
     _my_date_pattern = re.compile(
         r'(\d{,2})/(\d{,2})/(\d{4})')
 
     day, month, year, hour, minute, second = \
-        _my_date_pattern.search(aDateString).groups()
+        _my_date_pattern.search(date_string).groups()
     return (int(year), int(month), int(day), \
         0, 0, 0, 0, 0, 0)
 
@@ -261,7 +261,7 @@ def main(args):
                 modified = ''
 
             try:
-                feedparser.registerDateHandler(myDateHandler)
+                feedparser.registerDateHandler(date_handler)
                 feed = feedparser.parse(
                     temp_feed.url,
                     etag=etag,
@@ -297,7 +297,7 @@ def main(args):
                 if number_of_feed_news != 0:
                     temp_feed.etag = feed.get('etag', '')
                     temp_feed.modified = feed.get('modified', '')
-                    # XXX method get doesn't always work
+                    # method get doesn't always work
                     # https://gist.github.com/nivit/7bfb1feccba5638c25a07e0a7814e782
                     #temp_feed.title = feed.feed.get(
                     #    'title', f'NO TITLE for {temp_feed.url}')
@@ -307,7 +307,7 @@ def main(args):
                     temp_feed.max_title_length = str(max(
                         [len(e.title) for e in entries])
                     )
-                # XXX see above
+                # see previous comment
                 #temp_feed.title = feed.feed.get(
                 #    'title', f'NO TITLE for {temp_feed.url}')
                 temp_feed.title = feed.feed.title
