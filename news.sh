@@ -756,7 +756,7 @@ main() {
 
     if [ "${use_colors}" = "yes" ]; then
       if [ "${breaking_news}" = "1" ]; then
-        output="%{u${color}}%{+u}%{F${color}}${output}%{F- -u-}"
+        output="%{u${color}}%{+u}%{F${color}}${output}%{F- -u}"
       else
         output="%{F${color}}${output}%{F-}"
       fi
