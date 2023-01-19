@@ -57,18 +57,18 @@ python_cmd=python3
 
 # start script
 readonly _menu_lines=15
-readonly module_dir=${HOME}/.config/polybar/scripts/news
-readonly conf_dir=${module_dir}/conf
-readonly datadir=${module_dir}/data
-readonly all_news=${datadir}/all_news
+readonly module_dir="${HOME}"/.config/polybar/scripts/news
+readonly conf_dir="${module_dir}"/conf
+readonly datadir="${module_dir}"/data
+readonly all_news="${datadir}"/all_news
 readonly checksum_file="${datadir}/feed_list.md5"
-readonly download_script=${module_dir}/download_feeds.py
-readonly file_lock=${datadir}/.file_lock
+readonly download_script="${module_dir}"/download_feeds.py
+readonly file_lock="${datadir}"/.file_lock
 readonly hash_salt="https://github.com/nivit/polybar-module-news"
-readonly news_conf=${conf_dir}/news.conf
-readonly news_url=${datadir}/news.url
-readonly status_file=${datadir}/status
-readonly status_colors=${datadir}/status_colors
+readonly news_conf="${conf_dir}"/news.conf
+readonly news_url="${datadir}"/news.url
+readonly status_file="${datadir}"/status
+readonly status_colors="${datadir}"/status_colors
 os_name="$(uname -s)"
 readonly os_name
 readonly select_message='
@@ -204,9 +204,6 @@ parse_news_line() {
         ;;
       video/*)
         open_cmd="${video_player}"
-        ;;
-      *)
-        open_cmd="${open_cmd}"
         ;;
     esac
   fi
@@ -784,7 +781,6 @@ main() {
     exit 0
   elif [ "$1" = "select" ]; then
     select_feeds
-    exit 0
   fi
 }
 
