@@ -186,6 +186,8 @@ def get_news(entry, media_link=False):
         entry_link = entry.title_detail.get('href', '')
 
     title = html.unescape(entry.title)
+    # see https://gist.github.com/nivit/922a3176b2e80fef2d09e5c5268f7c8e
+    title = title.replace('\n', ' ')
 
     if len(title) == 0:
         title = 'ITEM WITHOUT A TITLE'
