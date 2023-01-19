@@ -206,7 +206,7 @@ parse_news_line() {
         open_cmd="${video_player}"
         ;;
       *)
-        open_cmd="xdg-open"
+        open_cmd="${open_cmd}"
         ;;
     esac
   fi
