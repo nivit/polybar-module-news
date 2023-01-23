@@ -88,7 +88,7 @@ All available options:
 | reverse_order    | reverse the order of the news in the search list                                                        | yes                                                   |
 | show_menu        | display a menu with all news (via rofi, right click)                                                    | yes                                                   |
 | menu_lines       | number of news to show in the menu, definible also in config.rasi, (height of menu)                     | 20                                                    |
-| media_link       | use link to a multimedial file if available                                                             | yes                                                   |
+| media_links      | use link to a multimedial file if available                                                             | yes                                                   |
 | audio_player     | program to open audio files of podcast                                                                  | gmplayer                                              |
 | video_player     | program to open video files of podcast                                                                  | mpv                                                   |
 | audio_prefix     | prefix for the audio titles                                                                             |  U+F2CE (audio)                                      |
