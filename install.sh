@@ -58,6 +58,7 @@ else  # update
     sed -i.bak -e 's,\(scripts/news\)\(/config.rasi\),\1/conf\2,1' \
         -e 's,add\(_ellipsis\),use\1,1' \
         -e 's,menu\(_prompt\),search\1,1' \
+        -e 's,\(media_link\)=\1s=,1' \
         "$(realpath "${destdir}"/conf/news.conf)"
     if [ -f "updates/2.x.x_to_${module_version}.txt" ]; then
       cat updates/2.x.x_to_"${module_version}.txt" >> "${destdir}"/conf/news.conf

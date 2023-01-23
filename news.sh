@@ -33,7 +33,7 @@ show_menu="yes" # show a menu with all news (via rofi, right click)
 menu_lines=20
 
 # Use a link to a multimedial file if available
-media_link="yes"
+media_links="yes"
 audio_player="gmplayer"
 # https://github.com/mpv-player/mpv/blob/master/TOOLS/umpv
 # video_player="umpv"
@@ -140,7 +140,7 @@ add_date() {
 add_prefix() {
   # add a prefix to the news title
 
-  if [ "${media_link}" = "yes" ]; then
+  if [ "${media_links}" = "yes" ]; then
     case "${media_type}" in
       audio/*)
         prefix="${audio_prefix}"
@@ -197,7 +197,7 @@ parse_news_line() {
   url="${3}"
   news_title="${4}"
 
-  if [ "${media_link}" = "yes" ]; then
+  if [ "${media_links}" = "yes" ]; then
     case "${media_type}" in
       audio/*)
         open_cmd="${audio_player}"
@@ -362,7 +362,7 @@ download_feeds() {
     print_msg error "install/configure a python 3 interpreter, please!"
   fi
 
-  if [ "${media_link}" = "yes" ]; then
+  if [ "${media_links}" = "yes" ]; then
     media_link="--media-link"
   else
     media_link=""
