@@ -681,8 +681,16 @@ setup() {
     fi
   fi
 
+  if ! command -v "${audio_player}" >/dev/null 2>&1; then
+    print_msg error "install ${audio_player} program or configure another audio player, please!"
+  fi
+
   if ! command -v "${open_cmd}" >/dev/null 2>&1; then
     print_msg error "install ${open_cmd} program, please!"
+  fi
+
+  if ! command -v "${video_player}" >/dev/null 2>&1; then
+    print_msg error "install ${video_player} program or configure another video player, please!"
   fi
 
   if [ ! -f "${rofi_config}" ]; then
