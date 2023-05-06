@@ -309,6 +309,11 @@ def main(args):
                     if len(temp_feed.title) == 0:
                         temp_feed.title = f'{temp_feed.url}'
 
+                # remove protocol from site's title and use only the domain
+                if temp_feed.title.startswith('https://') or \
+                        temp_feed.title.startswith('http://'):
+                    temp_feed.title = temp_feed.title.split('/')[2]
+
                 if temp_feed.breaking_news == '1':
                     temp_feed.title = temp_feed.title + ' [BN]'
 
