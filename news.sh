@@ -106,7 +106,7 @@ print_msg() {
     fi
     /usr/bin/printf "%s" "%{B${bg_color} F${fg_color}} -- ${2} -- %{B- F-}"
   else
-    /usr/bin/printf "-- %s --" "${2}"
+    /usr/bin/printf "\-\- %s --" "${2}"
   fi
 
   if [ "${1}" = "error" ]; then
