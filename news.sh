@@ -159,15 +159,16 @@ add_prefix() {
 add_ellipsis() {
   # add ... to the truncated title, if necessary
 
-  if [ "${length}" -gt 0 ] \
+  ellipsis="..."
+  ellipsis_length="${#ellipsis}"
+  if [ "${length}" -gt "${ellipsis_length}" ] \
     && [ "${length}" -lt "${#news_title}" ]; then
     if [ "${use_ellipsis}" = "yes" ]; then
-      ellipsis="..."
-      length="$((length - 3))"
+      char_pos="$((length - ellipsis_length))"
     else
       ellipsis=""
     fi
-    news_title="$(/usr/bin/printf "%s" "${news_title}" | cut -c -"${length}")"
+    news_title="$(/usr/bin/printf "%s" "${news_title}" | cut -c -"${char_pos}")"
     news_title="${news_title% *}${ellipsis}"
   fi
 }
@@ -332,7 +333,7 @@ search() {
         parse_status_line "${status_line}"
         if [ "$((choice <= (range + available_news)))" = "1" ]; then
           index="$((choice - range))"
-          news_line="$(sort -k2 "${reverse_order}" "${filename}" \
+          news_line="$(sort -k2 ${reverse_order} "${filename}" \
             | sed -n -e "${index}p")"
           parse_news_line "${news_line}"
           exec ${open_cmd} "${url}"
