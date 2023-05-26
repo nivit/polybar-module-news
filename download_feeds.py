@@ -180,7 +180,12 @@ def get_news(entry, media_link=False):
             '/')[0] in media_types]
         if matching:
             media_type = matching[0].type
-            entry_link = matching[0].href
+            if hasattr(matching[0], 'href'):
+                entry_link = matching[0].href
+            elif hasattr(matching[0], 'url'):
+                entry_link = matching[0].url
+            else:
+                entry_link = ''
 
     if len(entry_link) == 0:
         entry_link = entry.title_detail.get('href', '')
