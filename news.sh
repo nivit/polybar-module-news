@@ -63,7 +63,7 @@ readonly datadir="${module_dir}"/data
 readonly all_news="${datadir}"/all_news
 readonly checksum_file="${datadir}/feed_list.md5"
 readonly download_script="${module_dir}"/download_feeds.py
-readonly file_lock="${datadir}"/.file_lock
+#readonly file_lock="${datadir}"/.file_lock
 readonly hash_salt="https://github.com/nivit/polybar-module-news"
 readonly news_conf="${conf_dir}"/news.conf
 readonly news_url="${datadir}"/news.url
@@ -345,9 +345,9 @@ search() {
 
 download_feeds() {
 
-  if [ -f "${file_lock}" ]; then
-    exit 0
-  fi
+  #if [ -f "${file_lock}" ]; then
+  #  exit 0
+  #fi
 
   if [ -n "${1}" ]; then
     _last_minutes="${1}"
@@ -382,13 +382,13 @@ download_feeds() {
   fi
 
   (
-    /usr/bin/touch "${file_lock}"
+    #/usr/bin/touch "${file_lock}"
 
     # shellcheck disable=SC2086,SC2046
     "${python_cmd}" "${download_script}" -n "${max_news}" \
       ${colors_option} ${media_link} -l "${_last_minutes}" -- "${datadir}"
 
-    rm -f "${file_lock}"
+    #rm -f "${file_lock}"
   )
 }
 
@@ -414,14 +414,14 @@ change_colors() {
       counter="$((counter + 1))"
     done <"${status_file}" >"${new_status_file}"
 
-    if [ -f "${file_lock}" ]; then
-      print_msg warning "Downloading news/podcasts feeds"
-      exit 0
-    else
-      /usr/bin/touch "${file_lock}"
+    #if [ -f "${file_lock}" ]; then
+    #  print_msg warning "Downloading news/podcasts feeds"
+    #  exit 0
+    #else
+      #/usr/bin/touch "${file_lock}"
       mv -f "${new_status_file}" "${status_file}"
-      rm -f "${file_lock}"
-    fi
+      #rm -f "${file_lock}"
+    #fi
 
     /usr/bin/printf "%s" "${md5_colors}" >"${status_colors}"
   fi
@@ -446,10 +446,10 @@ get_rofi_value() {
 # shellcheck disable=SC2120
 check_feeds() {
 
-  if [ -f "${file_lock}" ]; then
-    print_msg warning "Downloading news/podcasts feeds"
-    exit 0
-  fi
+  #if [ -f "${file_lock}" ]; then
+  #  print_msg warning "Downloading news/podcasts feeds"
+  #  exit 0
+  #fi
 
   feeds_list_checksum="$(cat "${feeds_list}" "${feeds_list_breaking_news}" | "${md5_cmd}")"
 
@@ -472,11 +472,11 @@ check_feeds() {
 
   update_feeds "${new_status}" "${feeds_list}" 0
 
-  (
-    /usr/bin/touch "${file_lock}"
+  #(
+  #  /usr/bin/touch "${file_lock}"
     mv -f "${new_status}" "${status_file}"
-    rm -f "${file_lock}"
-  )
+  #  rm -f "${file_lock}"
+  #)
 }
 
 update_feeds() {
@@ -565,9 +565,9 @@ select_feeds() {
       awk 'BEGIN {FS="\t"; OFS="\t"} {$1=0; $3=0; print $0}' \
         "${status_file}" >"${new_status}"
       (
-        /usr/bin/touch "${file_lock}"
+      #  /usr/bin/touch "${file_lock}"
         cp -f "${new_status}" "${status_file}"
-        rm -f "${file_lock}"
+      #  rm -f "${file_lock}"
         rm -f "${new_status}"*
       )
       exit 0
@@ -597,9 +597,9 @@ select_feeds() {
       done
 
     (
-      /usr/bin/touch "${file_lock}"
+      #/usr/bin/touch "${file_lock}"
       cp -f "${new_status}" "${status_file}"
-      rm -f "${file_lock}"
+      #rm -f "${file_lock}"
       rm -f "${new_status}"*
     )
 
@@ -726,10 +726,10 @@ setup() {
 main() {
 
   if [ -z "$1" ]; then
-    if [ -f "${file_lock}" ]; then
-      print_msg warning "Downloading news/podcasts. Wait a moment please!"
-      exit 0
-    fi
+    #if [ -f "${file_lock}" ]; then
+    #  print_msg warning "Downloading news/podcasts. Wait a moment please!"
+    #  exit 0
+    #fi
 
     status_line="$(awk '$1 !~ /^0/ {print $0; exit 0}' "${status_file}")"
 
