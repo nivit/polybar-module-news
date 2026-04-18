@@ -33,7 +33,6 @@ import html
 import itertools
 import os
 import re
-import shlex
 import tempfile
 import time
 import sys
@@ -242,7 +241,7 @@ def main(args):
 
     if not os.path.isfile(status_fn):
         print('No status file found!')
-        shlex.os.remove(temp_status[1])
+        os.remove(temp_status[1])
         sys.exit(0)
 
     with open(temp_status[1], 'w', encoding='utf-8') as temp_status_fd, \
@@ -338,7 +337,7 @@ def main(args):
             write_news_file(
                 news_filename, entries, args.media_link)
 
-    shlex.os.rename(temp_status[1], status_fn)
+    os.rename(temp_status[1], status_fn)
 
 
 if __name__ == '__main__':
